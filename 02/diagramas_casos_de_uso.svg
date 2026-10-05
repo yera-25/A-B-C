@@ -1,0 +1,172 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1100" width="1600" height="1100" style="background:#0f172a; font-family:'Segoe UI', Helvetica, Arial, sans-serif;">
+  <defs>
+    <filter id="shadow-uc" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <!-- Title Banner -->
+  <rect x="40" y="30" width="1520" height="80" rx="10" fill="#1e293b" filter="url(#shadow-uc)" stroke="#334155" stroke-width="1.5"/>
+  <text x="70" y="70" fill="#f8fafc" font-size="24" font-weight="bold">SISTEMA POS PAPELERÍA A B C — DIAGRAMA UML DE CASOS DE USO CONSOLIDADO</text>
+  <text x="70" y="94" fill="#94a3b8" font-size="13">Fase 2: Especificación y Modelado de Casos de Uso del Sistema de Gestión y Punto de Venta | Papelería A B C</text>
+
+  <!-- System Boundary Box -->
+  <rect x="360" y="140" width="880" height="920" rx="14" fill="#1e293b" stroke="#38bdf8" stroke-width="2" stroke-dasharray="6,6"/>
+  <text x="390" y="175" fill="#38bdf8" font-size="16" font-weight="bold">Límite del Sistema: Web App POS Papelería A B C</text>
+
+  <!-- ================= ACTORS ================= -->
+  <!-- CAJERO -->
+  <g transform="translate(140, 320)">
+    <circle cx="50" cy="40" r="22" fill="#1e293b" stroke="#38bdf8" stroke-width="3"/>
+    <line x1="50" y1="62" x2="50" y2="120" stroke="#38bdf8" stroke-width="3"/>
+    <line x1="20" y1="85" x2="80" y2="85" stroke="#38bdf8" stroke-width="3"/>
+    <line x1="50" y1="120" x2="20" y2="165" stroke="#38bdf8" stroke-width="3"/>
+    <line x1="50" y1="120" x2="80" y2="165" stroke="#38bdf8" stroke-width="3"/>
+    <text x="50" y="195" fill="#f8fafc" font-size="15" font-weight="bold" text-anchor="middle">Cajero</text>
+    <text x="50" y="215" fill="#94a3b8" font-size="11" text-anchor="middle">(Operador POS A B C)</text>
+  </g>
+
+  <!-- ALMACENISTA -->
+  <g transform="translate(140, 720)">
+    <circle cx="50" cy="40" r="22" fill="#1e293b" stroke="#38bdf8" stroke-width="3"/>
+    <line x1="50" y1="62" x2="50" y2="120" stroke="#38bdf8" stroke-width="3"/>
+    <line x1="20" y1="85" x2="80" y2="85" stroke="#38bdf8" stroke-width="3"/>
+    <line x1="50" y1="120" x2="20" y2="165" stroke="#38bdf8" stroke-width="3"/>
+    <line x1="50" y1="120" x2="80" y2="165" stroke="#38bdf8" stroke-width="3"/>
+    <text x="50" y="195" fill="#f8fafc" font-size="15" font-weight="bold" text-anchor="middle">Almacenista</text>
+    <text x="50" y="215" fill="#94a3b8" font-size="11" text-anchor="middle">(Bodega Papelería A B C)</text>
+  </g>
+
+  <!-- VISITANTE / CLIENTE -->
+  <g transform="translate(1360, 320)">
+    <circle cx="50" cy="40" r="22" fill="#1e293b" stroke="#38bdf8" stroke-width="3"/>
+    <line x1="50" y1="62" x2="50" y2="120" stroke="#38bdf8" stroke-width="3"/>
+    <line x1="20" y1="85" x2="80" y2="85" stroke="#38bdf8" stroke-width="3"/>
+    <line x1="50" y1="120" x2="20" y2="165" stroke="#38bdf8" stroke-width="3"/>
+    <line x1="50" y1="120" x2="80" y2="165" stroke="#38bdf8" stroke-width="3"/>
+    <text x="50" y="195" fill="#f8fafc" font-size="15" font-weight="bold" text-anchor="middle">Cliente / Visitante</text>
+    <text x="50" y="215" fill="#94a3b8" font-size="11" text-anchor="middle">(Consulta Mostrador A B C)</text>
+  </g>
+
+  <!-- ADMINISTRADOR -->
+  <g transform="translate(1360, 720)">
+    <circle cx="50" cy="40" r="22" fill="#1e293b" stroke="#38bdf8" stroke-width="3"/>
+    <line x1="50" y1="62" x2="50" y2="120" stroke="#38bdf8" stroke-width="3"/>
+    <line x1="20" y1="85" x2="80" y2="85" stroke="#38bdf8" stroke-width="3"/>
+    <line x1="50" y1="120" x2="20" y2="165" stroke="#38bdf8" stroke-width="3"/>
+    <line x1="50" y1="120" x2="80" y2="165" stroke="#38bdf8" stroke-width="3"/>
+    <text x="50" y="195" fill="#f8fafc" font-size="15" font-weight="bold" text-anchor="middle">Administrador</text>
+    <text x="50" y="215" fill="#94a3b8" font-size="11" text-anchor="middle">(Control Global A B C)</text>
+  </g>
+
+  <!-- ================= USE CASE OVALS ================= -->
+
+  <!-- CU-01 Venta Directa -->
+  <g transform="translate(420, 210)" filter="url(#shadow-uc)">
+    <ellipse cx="140" cy="35" rx="130" ry="32" fill="#0f766e" stroke="#2dd4bf" stroke-width="1.8"/>
+    <text x="140" y="32" fill="#ffffff" font-size="13" font-weight="bold" text-anchor="middle">CU-01 Realizar Venta Directa</text>
+    <text x="140" y="49" fill="#ccfbf1" font-size="11" text-anchor="middle">(Lectura Barras / In-Memory)</text>
+  </g>
+
+  <!-- CU-02 Desglose Empaque a Pieza -->
+  <g transform="translate(420, 680)" filter="url(#shadow-uc)">
+    <ellipse cx="140" cy="35" rx="130" ry="32" fill="#4338ca" stroke="#818cf8" stroke-width="1.8"/>
+    <text x="140" y="32" fill="#ffffff" font-size="13" font-weight="bold" text-anchor="middle">CU-02 Desglosar Caja a Pieza</text>
+    <text x="140" y="49" fill="#e0e7ff" font-size="11" text-anchor="middle">(RF-05 / Stock Papelería A B C)</text>
+  </g>
+
+  <!-- CU-03 Importar Catálogo CSV -->
+  <g transform="translate(880, 780)" filter="url(#shadow-uc)">
+    <ellipse cx="140" cy="35" rx="130" ry="32" fill="#92400e" stroke="#fbbf24" stroke-width="1.8"/>
+    <text x="140" y="32" fill="#ffffff" font-size="13" font-weight="bold" text-anchor="middle">CU-03 Carga Masiva CSV</text>
+    <text x="140" y="49" fill="#fef3c7" font-size="11" text-anchor="middle">(RF-06 / Catálogo Inicial A B C)</text>
+  </g>
+
+  <!-- CU-04 Respaldo de Seguridad -->
+  <g transform="translate(880, 890)" filter="url(#shadow-uc)">
+    <ellipse cx="140" cy="35" rx="130" ry="32" fill="#92400e" stroke="#fbbf24" stroke-width="1.8"/>
+    <text x="140" y="32" fill="#ffffff" font-size="13" font-weight="bold" text-anchor="middle">CU-04 Respaldo Local 1-Clic</text>
+    <text x="140" y="49" fill="#fef3c7" font-size="11" text-anchor="middle">(RNF-06 / Respaldo Disco Local)</text>
+  </g>
+
+  <!-- CU-05 Consulta de Catálogo -->
+  <g transform="translate(880, 240)" filter="url(#shadow-uc)">
+    <ellipse cx="140" cy="35" rx="130" ry="32" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1.8"/>
+    <text x="140" y="32" fill="#ffffff" font-size="13" font-weight="bold" text-anchor="middle">CU-05 Consultar Catálogo A B C</text>
+    <text x="140" y="49" fill="#dbeafe" font-size="11" text-anchor="middle">(Precios / Stock Papelería A B C)</text>
+  </g>
+
+  <!-- CU-06 Gestión Multicarrito -->
+  <g transform="translate(730, 330)" filter="url(#shadow-uc)">
+    <ellipse cx="130" cy="30" rx="125" ry="28" fill="#1f2937" stroke="#9ca3af" stroke-width="1.5"/>
+    <text x="130" y="28" fill="#ffffff" font-size="12" font-weight="bold" text-anchor="middle">CU-06 Gestionar Carritos (1 a 5)</text>
+    <text x="130" y="43" fill="#d1d5db" font-size="10" text-anchor="middle">&lt;&lt;extend&gt;&gt; Venta Directa</text>
+  </g>
+
+  <!-- CU-07 Cobro Servicios de Copiado -->
+  <g transform="translate(420, 330)" filter="url(#shadow-uc)">
+    <ellipse cx="140" cy="32" rx="130" ry="30" fill="#0f766e" stroke="#2dd4bf" stroke-width="1.8"/>
+    <text x="140" y="29" fill="#ffffff" font-size="12" font-weight="bold" text-anchor="middle">CU-07 Cobro Copias / Impresión</text>
+    <text x="140" y="45" fill="#ccfbf1" font-size="10" text-anchor="middle">(Descuenta hojas/insumos en BD)</text>
+  </g>
+
+  <!-- CU-08 Impresión Comprobante -->
+  <g transform="translate(730, 190)" filter="url(#shadow-uc)">
+    <ellipse cx="130" cy="28" rx="125" ry="26" fill="#1f2937" stroke="#9ca3af" stroke-width="1.5"/>
+    <text x="130" y="26" fill="#ffffff" font-size="12" font-weight="bold" text-anchor="middle">CU-08 Emitir Ticket Papelería A B C</text>
+    <text x="130" y="41" fill="#d1d5db" font-size="10" text-anchor="middle">&lt;&lt;include&gt;&gt; Venta Directa</text>
+  </g>
+
+  <!-- CU-09 Apertura y Cierre de Caja -->
+  <g transform="translate(420, 450)" filter="url(#shadow-uc)">
+    <ellipse cx="140" cy="32" rx="130" ry="30" fill="#9a3412" stroke="#fb923c" stroke-width="1.8"/>
+    <text x="140" y="29" fill="#ffffff" font-size="12" font-weight="bold" text-anchor="middle">CU-09 Corte y Arqueo de Caja</text>
+    <text x="140" y="45" fill="#fed7aa" font-size="10" text-anchor="middle">(Balance Diario Papelería A B C)</text>
+  </g>
+
+  <!-- CU-10 Registro Kardex y Mermas -->
+  <g transform="translate(420, 800)" filter="url(#shadow-uc)">
+    <ellipse cx="140" cy="32" rx="130" ry="30" fill="#4338ca" stroke="#818cf8" stroke-width="1.8"/>
+    <text x="140" y="29" fill="#ffffff" font-size="12" font-weight="bold" text-anchor="middle">CU-10 Registro Kardex / Mermas</text>
+    <text x="140" y="45" fill="#e0e7ff" font-size="10" text-anchor="middle">(Auditoría de existencias)</text>
+  </g>
+
+  <!-- CU-11 Administración de Usuarios -->
+  <g transform="translate(880, 670)" filter="url(#shadow-uc)">
+    <ellipse cx="140" cy="32" rx="130" ry="30" fill="#92400e" stroke="#fbbf24" stroke-width="1.8"/>
+    <text x="140" y="29" fill="#ffffff" font-size="12" font-weight="bold" text-anchor="middle">CU-11 Gestionar Usuarios y Roles</text>
+    <text x="140" y="45" fill="#fef3c7" font-size="10" text-anchor="middle">(PIN, accesos y permisos)</text>
+  </g>
+
+  <!-- CU-12 Reportes y Balances -->
+  <g transform="translate(880, 560)" filter="url(#shadow-uc)">
+    <ellipse cx="140" cy="32" rx="130" ry="30" fill="#92400e" stroke="#fbbf24" stroke-width="1.8"/>
+    <text x="140" y="29" fill="#ffffff" font-size="12" font-weight="bold" text-anchor="middle">CU-12 Consultar Reportes de Venta</text>
+    <text x="140" y="45" fill="#fef3c7" font-size="10" text-anchor="middle">(Filtros por fecha / CSV)</text>
+  </g>
+
+  <!-- ================= ASSOCIATIONS ================= -->
+  <!-- Cajero lines -->
+  <line x1="220" y1="380" x2="420" y2="245" stroke="#38bdf8" stroke-width="1.8"/>
+  <line x1="220" y1="390" x2="420" y2="362" stroke="#38bdf8" stroke-width="1.8"/>
+  <line x1="220" y1="410" x2="420" y2="482" stroke="#38bdf8" stroke-width="1.8"/>
+
+  <!-- Almacenista lines -->
+  <line x1="220" y1="780" x2="420" y2="715" stroke="#818cf8" stroke-width="1.8"/>
+  <line x1="220" y1="800" x2="420" y2="832" stroke="#818cf8" stroke-width="1.8"/>
+
+  <!-- Visitante lines -->
+  <line x1="1380" y1="380" x2="1160" y2="275" stroke="#60a5fa" stroke-width="1.8"/>
+
+  <!-- Admin lines -->
+  <line x1="1380" y1="780" x2="1160" y2="592" stroke="#fbbf24" stroke-width="1.8"/>
+  <line x1="1380" y1="790" x2="1160" y2="702" stroke="#fbbf24" stroke-width="1.8"/>
+  <line x1="1380" y1="800" x2="1160" y2="812" stroke="#fbbf24" stroke-width="1.8"/>
+  <line x1="1380" y1="810" x2="1160" y2="922" stroke="#fbbf24" stroke-width="1.8"/>
+  <line x1="1380" y1="770" x2="700" y2="482" stroke="#fbbf24" stroke-width="1.8"/>
+
+  <!-- Include / Extend dashed lines -->
+  <line x1="680" y1="240" x2="730" y2="218" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4,4"/>
+  <line x1="680" y1="250" x2="735" y2="340" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4,4"/>
+
+</svg>
