@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Papelería A B C — Sistema POS Local Autónomo</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="shortcut icon" href="assets/img/LOGO.jpg" type="image/jpeg">
+</head>
+<body>
+
+    <!-- ENCABEZADO SUPERIOR INSTITUCIONAL -->
+    <header class="app-header">
+        <div class="brand-section">
+            <img src="assets/img/LOGO.jpg" alt="Logotipo Papelería A B C" class="brand-logo-img">
+            <div class="brand-text">
+                <h1>Papelería A B C</h1>
+                <span class="brand-tagline">Sistema POS Local & Inventario Autónomo</span>
+            </div>
+        </div>
+
+        <nav class="header-center-nav">
+            <button class="nav-tab-btn active" data-tab="tab-pos">
+                <span>🛒</span> Mostrador POS
+            </button>
+            <button class="nav-tab-btn" data-tab="tab-inventario">
+                <span>📦</span> Almacén e Inventario
+            </button>
+            <button class="nav-tab-btn" data-tab="tab-caja">
+                <span>💵</span> Control de Caja
+            </button>
+            <button class="nav-tab-btn" data-tab="tab-configuracion">
+                <span>⚙️</span> Configuración
+            </button>
+        </nav>
+
+        <div class="header-right-meta">
+            <div class="meta-chip">
+                <span>👤</span>
+                <span id="header-user-display">Gerardo Cabrera</span>
+            </div>
+            <div class="live-clock-badge" id="live-clock">12:00:00</div>
+            <button class="btn-header-backup" id="btn-export-backup" title="Exportar respaldo instantáneo en 1 Clic (RNF-06)">
+                💾 Respaldo 1-Clic
+            </button>
+        </div>
+    </header>
+
+    <!-- ÁREA DE VISTA PRINCIPAL (SPA) -->
+    <main class="app-main-viewport">
+
+        <!-- ================= 1. PESTAÑA MOSTRADOR POS ================= -->
+        <section id="tab-pos" class="app-tab-section active">
+            <div class="pos-workspace-grid">
+                
+                <!-- Columna Izquierda: Búsqueda y Catálogo Rápido -->
+                <div class="pos-left-panel">
+                    <div class="pos-search-header-bar">
+                        <div class="search-input-wrapper" id="barcode-search-container">
+                            <span class="search-icon-inside">🔍</span>
+                            <input type="text" id="barcode-search-input" placeholder="Escanear código de barras o teclear nombre/SKU... [F1]" autofocus autocomplete="off">
+                            <div class="search-dropdown" id="search-dropdown-results"></div>
+                        </div>
+                        <button class="btn-fast-service" onclick="window.POS_MODULE.openCopiasModal()">
+                            📄 Copias / Impresiones [F4]
+                        </button>
+                    </div>
+
+                    <div class="pos-quick-catalog-area">
+                        <div class="catalog-section-title">Artículos Rápidos de Mostrador</div>
+                        <div class="quick-products-grid" id="quick-products-grid">
+                            <!-- Inyectado dinámicamente por pos.js -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna Derecha: Pestañas de 5 Carritos y Ticket Activo -->
+                <div class="pos-right-ticket-panel">
+                    <div class="cart-tabs-bar" id="cart-tabs-container">
+                        <!-- Inyectado dinámicamente por pos.js (5 carritos) -->
+                    </div>
+
+                    <div class="cart-items-scrollable">
+                        <div id="cart-empty-state" class="cart-empty-placeholder">
+                            <div class="empty-icon">🛒</div>
+                            <p><b>Carrito vacío</b></p>
+                            <small>Escanee un producto o elija del catálogo rápido para comenzar.</small>
+                        </div>
+
+                        <div id="cart-table-wrapper" style="display: none;">
+                            <table class="cart-table">
+                                <thead>
+                                    <tr>
+                                        <th>Artículo</th>
+                                        <th class="text-center" style="width: 85px;">Cant.</th>
+                                        <th class="text-right" style="width: 70px;">P.U.</th>
+                                        <th class="text-right" style="width: 75px;">Subtotal</th>
+                                        <th class="text-center" style="width: 35px;"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="cart-items-tbody">
+                                    <!-- Inyectado dinámicamente por pos.js -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Pie de Cobro y Totales -->
+                    <div class="pos-checkout-footer">
+                        <div class="totals-breakdown">
+                            <div class="totals-row">
+                                <span>Subtotal (sin IVA):</span>
+                                <span id="calc-subtotal">$0.00</span>
+                            </div>
+                            <div class="totals-row">
+                                <span>IVA (16% trasl.):</span>
+                                <span id="calc-iva">$0.00</span>
+                            </div>
+                            <div class="totals-row main-total-row">
+                                <span>TOTAL:</span>
+                                <span id="calc-total">$0.00</span>
+                            </div>
+                        </div>
+
+                        <button class="btn-checkout-action" onclick="window.POS_MODULE.openCheckoutModal()">
+                            💳 COBRAR TICKET [F10]
+                        </button>
+
+                        <div class="checkout-aux-actions">
+                            <button class="btn-aux" onclick="window.POS_MODULE.cycleNextCart()">
+                                🔄 Alternar Carrito [F2]
+                            </button>
+                            <button class="btn-aux" onclick="window.POS_MODULE.clearActiveCart()">
+                                🗑️ Limpiar Carrito [Esc]
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ================= 2. PESTAÑA ALMACÉN E INVENTARIO ================= -->
+        <section id="tab-inventario" class="app-tab-section">
+            <div class="inventory-container">
+                <div class="inv-toolbar">
+                    <div class="inv-filters">
+                        <input type="text" id="inv-search-input" placeholder="Filtrar por nombre, SKU o código de barras...">
+                        <select id="inv-category-filter">
+                            <option value="">Todas las Categorías</option>
+                            <option value="1">Escolar y Escritura</option>
+                            <option value="2">Papeles y Cuadernos</option>
+                            <option value="3">Manualidades y Adhesivos</option>
+                            <option value="4">Oficina y Archivo</option>
+                            <option value="5">Servicios de Copiado</option>
+                        </select>
+                    </div>
+                    <button class="btn-fast-service" onclick="window.INVENTORY_MODULE.openKardexModal()">
+                        📜 Auditoría de Kardex (RF-07)
+                    </button>
+                </div>
+
+                <div class="inv-table-wrapper">
+                    <table class="inv-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 140px;">Código de Barras</th>
+                                <th>Artículo / SKU</th>
+                                <th>Categoría</th>
+                                <th class="text-right" style="width: 100px;">Costo</th>
+                                <th class="text-right" style="width: 100px;">Precio Venta</th>
+                                <th class="text-center" style="width: 130px;">Stock Actual</th>
+                                <th class="text-center" style="width: 150px;">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventory-table-tbody">
+                            <!-- Inyectado dinámicamente por inventory.js -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 3. PESTAÑA CONTROL DE CAJA ================= -->
+        <section id="tab-caja" class="app-tab-section">
+            <div class="inventory-container" style="max-width: 900px; margin: 0 auto; width: 100%;">
+                <h2 style="font-size: 1.2rem; color: var(--color-primary); margin-bottom: 12px;">Control de Turnos y Balance de Caja (RF-08)</h2>
+                
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px;">
+                    <div style="background: #f8fafc; border: 1px solid var(--color-border); border-radius: 8px; padding: 14px;">
+                        <small style="color: var(--color-slate-light); font-weight: bold;">ESTADO DEL TURNO</small>
+                        <div id="cash-shift-status" style="font-size: 1.1rem; font-weight: 800; color: var(--color-emerald); margin-top: 4px;">ABIERTO</div>
+                        <small style="color: var(--color-slate-light);">Cajero: <span id="cash-cashier-name">Gerardo Cabrera</span></small>
+                    </div>
+                    <div style="background: #f8fafc; border: 1px solid var(--color-border); border-radius: 8px; padding: 14px;">
+                        <small style="color: var(--color-slate-light); font-weight: bold;">FONDO INICIAL DE APERTURA</small>
+                        <div id="cash-initial-fund" style="font-size: 1.1rem; font-weight: 800; color: var(--color-primary); margin-top: 4px;">$500.00</div>
+                        <small style="color: var(--color-slate-light);">Apertura: <span id="cash-open-date">Hoy</span></small>
+                    </div>
+                    <div style="background: #f8fafc; border: 1px solid var(--color-border); border-radius: 8px; padding: 14px;">
+                        <small style="color: var(--color-slate-light); font-weight: bold;">VENTAS EN EFECTIVO</small>
+                        <div id="cash-sales-cash" style="font-size: 1.1rem; font-weight: 800; color: var(--color-emerald); margin-top: 4px;">$0.00</div>
+                        <small style="color: var(--color-slate-light);">Tarjetas: <span id="cash-sales-card">$0.00</span></small>
+                    </div>
+                </div>
+
+                <div style="background: #ffffff; border: 2px solid var(--color-border); border-radius: 10px; padding: 20px;">
+                    <h3 style="font-size: 1rem; color: var(--color-primary); margin-bottom: 10px;">Arqueo y Cierre de Jornada</h3>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; font-size: 0.9rem;">
+                        <span>Efectivo Total Esperado en Cajón:</span>
+                        <b id="cash-expected-drawer" style="font-size: 1.2rem; color: var(--color-primary);">$500.00</b>
+                    </div>
+                    <div style="margin-bottom: 14px;">
+                        <label style="display: block; font-size: 0.82rem; font-weight: 600; margin-bottom: 4px;">Efectivo Físico Contado en Caja:</label>
+                        <input type="number" id="input-arqueo-contado" step="0.5" placeholder="Ingrese monto contado..." style="width: 100%; padding: 10px; border: 2px solid var(--color-border); border-radius: 6px; font-size: 1.1rem; font-weight: bold;" oninput="window.CASH_MODULE.calcularArqueoCierre()">
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; font-size: 0.9rem;">
+                        <span>Diferencia de Caja:</span>
+                        <b id="arqueo-diferencia-display" style="font-size: 1rem; color: var(--color-slate-light);">$0.00</b>
+                    </div>
+                    <button class="btn-checkout-action" style="background: var(--color-primary);" onclick="window.CASH_MODULE.cerrarTurnoCaja()">
+                        🔒 Registrar Corte y Cerrar Turno
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 4. PESTAÑA CONFIGURACIÓN Y RESPALDOS ================= -->
+        <section id="tab-configuracion" class="app-tab-section">
+            <div class="inventory-container" style="max-width: 800px; margin: 0 auto; width: 100%;">
+                <h2 style="font-size: 1.2rem; color: var(--color-primary); margin-bottom: 14px;">Configuración de "Papelería A B C"</h2>
+                
+                <div style="background: #f8fafc; border: 1px solid var(--color-border); border-radius: 8px; padding: 18px; margin-bottom: 18px;">
+                    <h3 style="font-size: 0.95rem; color: var(--color-primary); margin-bottom: 10px;">Datos Institucionales del Negocio</h3>
+                    <table style="width: 100%; font-size: 0.85rem; border-collapse: collapse;">
+                        <tr><td style="padding: 6px 0; color: var(--color-slate-light); width: 180px;">Nombre Comercial:</td><td><b id="cfg-nombre-comercial">Papelería A B C</b></td></tr>
+                        <tr><td style="padding: 6px 0; color: var(--color-slate-light);">RFC:</td><td><code id="cfg-rfc">PABC261005ABC</code></td></tr>
+                        <tr><td style="padding: 6px 0; color: var(--color-slate-light);">Dirección:</td><td id="cfg-direccion">Av. Tecnológico #120, Col. Centro</td></tr>
+                        <tr><td style="padding: 6px 0; color: var(--color-slate-light);">Teléfono:</td><td id="cfg-telefono">442-123-4567</td></tr>
+                        <tr><td style="padding: 6px 0; color: var(--color-slate-light);">Leyenda de Ticket:</td><td id="cfg-leyenda">¡Gracias por su compra en Papelería A B C!</td></tr>
+                    </table>
+                </div>
+
+                <div style="background: #f8fafc; border: 1px solid var(--color-border); border-radius: 8px; padding: 18px;">
+                    <h3 style="font-size: 0.95rem; color: var(--color-primary); margin-bottom: 6px;">Persistencia Local Offline (IndexedDB)</h3>
+                    <p style="font-size: 0.8rem; color: var(--color-slate-light); margin-bottom: 14px;">
+                        Base de datos: <code>PapeleriaABC_POS_DB</code>. Operación 100% offline sin servidores externos (RNF-02) con latencia menor a 10ms (RNF-01).
+                    </p>
+                    <button class="btn-fast-service" onclick="document.getElementById('btn-export-backup').click()">
+                        📥 Descargar Respaldo JSON Completo
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- BARRA INFERIOR DE ATAJOS DE TECLADO (RNF-05) -->
+    <footer class="shortcuts-footer-bar">
+        <div>
+            <span><span class="shortcut-badge">F1</span>Buscar / Escanear</span>
+            <span style="margin-left: 12px;"><span class="shortcut-badge">F2</span>Alternar Carritos (1 al 5)</span>
+            <span style="margin-left: 12px;"><span class="shortcut-badge">F4</span>Copias y Servicios</span>
+            <span style="margin-left: 12px;"><span class="shortcut-badge">F10</span>Cobrar Ticket</span>
+            <span style="margin-left: 12px;"><span class="shortcut-badge">Esc</span>Cerrar / Cancelar</span>
+        </div>
+        <div>
+            <span>Papelería A B C • Web App Local Offline • Latencia &lt;10ms</span>
+        </div>
+    </footer>
+
+    <!-- ================= MODAL COBRO (CHECKOUT) ================= -->
+    <div id="modal-checkout" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Cobro de Venta — Papelería A B C</h3>
+                <button class="btn-close-modal" onclick="window.POS_MODULE.closeAllModals()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div style="text-align: center; margin-bottom: 16px;">
+                    <small style="color: var(--color-slate-light); font-weight: bold;">TOTAL A COBRAR</small>
+                    <div id="modal-checkout-total" style="font-size: 2rem; font-weight: 900; color: var(--color-primary);">$0.00</div>
+                </div>
+
+                <div style="margin-bottom: 12px;">
+                    <label style="display: block; font-size: 0.8rem; font-weight: 700; margin-bottom: 4px;">Método de Pago:</label>
+                    <select id="checkout-metodo-pago" style="width: 100%; padding: 8px; border: 1px solid var(--color-border); border-radius: 6px;">
+                        <option value="EFECTIVO">Efectivo</option>
+                        <option value="TARJETA">Tarjeta de Débito / Crédito</option>
+                        <option value="TRANSFERENCIA">Transferencia SPEI</option>
+                    </select>
+                </div>
+
+                <div style="margin-bottom: 12px;">
+                    <label style="display: block; font-size: 0.8rem; font-weight: 700; margin-bottom: 4px;">Efectivo Recibido:</label>
+                    <input type="number" id="checkout-efectivo-recibido" step="0.5" style="width: 100%; padding: 10px; border: 2px solid var(--color-primary); border-radius: 6px; font-size: 1.2rem; font-weight: bold;" oninput="window.POS_MODULE.calcularCambio()">
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background: #f8fafc; border-radius: 6px; font-size: 0.95rem;">
+                    <span>Cambio a Devolver:</span>
+                    <b id="checkout-cambio-devuelto" style="font-size: 1.3rem; color: var(--color-emerald);">$0.00</b>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-aux" onclick="window.POS_MODULE.closeAllModals()">Cancelar</button>
+                <button class="btn-checkout-action" id="btn-confirmar-cobro" style="width: auto; padding: 8px 18px;" onclick="window.POS_MODULE.confirmarVenta()">
+                    ✓ Confirmar y Emitir Ticket
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= MODAL VISTA PREVIA TICKET TÉRMICO (RF-04) ================= -->
+    <div id="modal-ticket-preview" class="modal-overlay">
+        <div class="modal-card" style="max-width: 400px;">
+            <div class="modal-header">
+                <h3>Comprobante Térmico (80mm)</h3>
+                <button class="btn-close-modal" onclick="window.POS_MODULE.closeAllModals()">✕</button>
+            </div>
+            <div class="modal-body" style="background: #f1f5f9;">
+                <div id="ticket-render-zone">
+                    <!-- Inyectado por pos.js -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-aux" onclick="window.POS_MODULE.closeAllModals()">Cerrar</button>
+                <button class="btn-checkout-action" id="btn-imprimir-ticket-modal" style="width: auto; padding: 8px 16px;">
+                    🖨️ Imprimir Ticket
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= MODAL DESGLOSE DE CAJA A PIEZA (RF-05) ================= -->
+    <div id="modal-unbox" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Desglose de Empaque a Piezas Sueltas (RF-05)</h3>
+                <button class="btn-close-modal" onclick="window.POS_MODULE.closeAllModals()">✕</button>
+            </div>
+            <div class="modal-body">
+                <p style="font-size: 0.85rem; color: var(--color-slate-light); margin-bottom: 12px;">
+                    Convierta empaques cerrados de mayorista en existencias individuales para venta al menudeo en mostrador.
+                </p>
+                <div style="background: #f8fafc; border: 1px solid var(--color-border); border-radius: 6px; padding: 12px; margin-bottom: 12px;">
+                    <div><b>Empaque:</b> <span id="unbox-package-name">Caja</span></div>
+                    <div><b>Stock actual de empaques:</b> <span id="unbox-current-stock" style="font-weight: bold; color: var(--color-primary);">0</span></div>
+                    <div id="unbox-conversion-preview" style="color: var(--color-emerald); font-size: 0.85rem; margin-top: 4px;"></div>
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.8rem; font-weight: 700; margin-bottom: 4px;">Cantidad de cajas/paquetes a desglosar:</label>
+                    <input type="number" id="unbox-qty-input" min="1" value="1" style="width: 100%; padding: 8px; border: 1px solid var(--color-border); border-radius: 6px; font-weight: bold;">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-aux" onclick="window.POS_MODULE.closeAllModals()">Cancelar</button>
+                <button class="btn-checkout-action" style="width: auto; padding: 8px 16px; background: #b45309;" onclick="window.INVENTORY_MODULE.confirmarDesglose()">
+                    📦 Ejecutar Desglose en Kardex
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= MODAL SERVICIOS RÁPIDOS DE COPIADO (RF-03) ================= -->
+    <div id="modal-servicios-copias" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Cobro Rápido de Copias y Servicios (RF-03)</h3>
+                <button class="btn-close-modal" onclick="window.POS_MODULE.closeAllModals()">✕</button>
+            </div>
+            <div class="modal-body">
+                <p style="font-size: 0.8rem; color: var(--color-slate-light); margin-bottom: 12px;">
+                    Al cobrar, el sistema deducirá automáticamente del inventario las hojas bond y micas consumidas.
+                </p>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <div>
+                        <b>Copia B/N Carta</b> ($1.50)
+                        <br/><small class="text-muted">Deduce 1 hoja bond de stock</small>
+                    </div>
+                    <input type="number" id="input-cant-copias-bn" min="0" placeholder="0" style="width: 80px; padding: 6px; border: 1px solid var(--color-border); border-radius: 6px; text-align: center; font-weight: bold;">
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <div>
+                        <b>Impresión Láser Color</b> ($6.00)
+                        <br/><small class="text-muted">Deduce 1 hoja bond de stock</small>
+                    </div>
+                    <input type="number" id="input-cant-copias-color" min="0" placeholder="0" style="width: 80px; padding: 6px; border: 1px solid var(--color-border); border-radius: 6px; text-align: center; font-weight: bold;">
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <b>Enmicado Térmico Carta</b> ($18.00)
+                        <br/><small class="text-muted">Deduce 1 mica térmica de stock</small>
+                    </div>
+                    <input type="number" id="input-cant-enmicados" min="0" placeholder="0" style="width: 80px; padding: 6px; border: 1px solid var(--color-border); border-radius: 6px; text-align: center; font-weight: bold;">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-aux" onclick="window.POS_MODULE.closeAllModals()">Cancelar</button>
+                <button class="btn-checkout-action" style="width: auto; padding: 8px 16px;" onclick="window.POS_MODULE.agregarServiciosAlCarrito()">
+                    + Agregar al Carrito Activo
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= MODAL AUDITORÍA KARDEX (RF-07) ================= -->
+    <div id="modal-kardex" class="modal-overlay">
+        <div class="modal-card" style="max-width: 800px;">
+            <div class="modal-header">
+                <h3>Libro de Movimientos Kardex (RF-07) — Papelería A B C</h3>
+                <button class="btn-close-modal" onclick="window.POS_MODULE.closeAllModals()">✕</button>
+            </div>
+            <div class="modal-body" style="padding: 0;">
+                <div style="max-height: 400px; overflow-y: auto;">
+                    <table class="inv-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 110px;">Fecha</th>
+                                <th>Artículo</th>
+                                <th>Movimiento</th>
+                                <th class="text-center" style="width: 65px;">Cant.</th>
+                                <th class="text-center" style="width: 65px;">Ant.</th>
+                                <th class="text-center" style="width: 65px;">Post.</th>
+                                <th>Referencia</th>
+                            </tr>
+                        </thead>
+                        <tbody id="kardex-table-tbody">
+                            <!-- Inyectado dinámicamente por inventory.js -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-aux" onclick="window.POS_MODULE.closeAllModals()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTENEDOR FLOTANTE DE NOTIFICACIONES TOAST -->
+    <div id="toast-container"></div>
+
+    <!-- SCRIPTS MODULARES -->
+    <script src="js/db.js"></script>
+    <script src="js/pos.js"></script>
+    <script src="js/inventory.js"></script>
+    <script src="js/cash.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
