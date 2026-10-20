@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Papelería A B C — Sistema POS & Gestión Integral</title>
+    <link rel="icon" type="image/jpeg" href="LOGO.jpg">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+    <!-- ================= 1. ENCABEZADO SUPERIOR INSTITUCIONAL ================= -->
+    <header class="app-header">
+        <div class="brand-section">
+            <img src="LOGO.jpg" alt="Logotipo Papelería A B C" class="brand-logo-img">
+            <div class="brand-text">
+                <h1>Papelería A B C</h1>
+                <div class="brand-tagline">Sistema POS Local & Inventario Autónomo | Entregable Unificado</div>
+            </div>
+        </div>
+
+        <!-- Pestañas Maestras de Navegación del Sistema -->
+        <nav class="header-center-nav">
+            <button class="nav-tab-btn active" data-tab="tab-pos">
+                <span>🛒</span> Mostrador POS
+            </button>
+            <button class="nav-tab-btn" data-tab="tab-inventario">
+                <span>📦</span> Almacén e Inventario
+            </button>
+            <button class="nav-tab-btn" data-tab="tab-caja">
+                <span>💵</span> Control de Caja
+            </button>
+            <button class="nav-tab-btn" data-tab="tab-configuracion">
+                <span>⚙️</span> Configuración
+            </button>
+        </nav>
+
+        <div class="header-right-meta">
+            <div class="meta-chip">
+                <span>👤</span>
+                <span>Gerardo Cabrera (Cajero)</span>
+            </div>
+            <div class="live-clock-badge" id="live-clock">12:00:00</div>
+            <button class="btn-header-backup" onclick="window.IMPORT_EXPORT_MODULE.exportarRespaldoJSON()" title="Exportar respaldo instantáneo en 1 Clic (RNF-06)">
+                💾 Respaldo Rápido
+            </button>
+        </div>
+    </header>
+
+    <!-- ================= 2. VIEWPORT PRINCIPAL SPA ================= -->
+    <main class="app-main-viewport">
+
+        <!-- ================= PESTAÑA 1: MOSTRADOR POS ================= -->
+        <section id="tab-pos" class="app-tab-section active">
+            <div class="pos-workspace-grid">
+                
+                <!-- Columna Izquierda: Búsqueda y Catálogo Rápido -->
+                <div class="pos-left-panel">
+                    <div class="pos-search-header-bar">
+                        <div class="search-input-wrapper" id="barcode-search-container">
+                            <span class="search-icon-inside">🔍</span>
+                            <input type="text" id="barcode-search-input" placeholder="Escanear código de barras o teclear nombre/SKU... [F1]" autofocus autocomplete="off">
+                            <div class="search-dropdown" id="search-dropdown-results"></div>
+                        </div>
+                        <button class="btn-fast-service" onclick="window.POS_MODULE.openCopiasModal()">
+                            📄 Copias / Impresiones [F4]
+                        </button>
+                    </div>
+
+                    <div class="pos-quick-catalog-area">
+                        <div class="catalog-section-title">Artículos Rápidos de Mostrador</div>
+                        <div class="quick-products-grid" id="quick-products-grid">
+                            <!-- Inyectado dinámicamente por pos.js -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna Derecha: Pestañas de 5 Carritos y Ticket Activo -->
+                <div class="pos-right-ticket-panel">
+                    <div class="cart-tabs-bar" id="cart-tabs-container">
+                        <!-- Inyectado dinámicamente por pos.js (5 carritos) -->
+                    </div>
+
+                    <div class="cart-items-scrollable">
+                        <div id="cart-empty-state" class="cart-empty-placeholder">
+                            <div class="empty-icon">🛒</div>
+                            <p><b>Carrito vacío</b></p>
+                            <small>Escanee un producto o elija del catálogo rápido para comenzar.</small>
+                        </div>
+
+                        <div id="cart-table-wrapper" style="display: none;">
+                            <table class="cart-table">
+                                <thead>
+                                    <tr>
+                                        <th>Artículo</th>
+                                        <th class="text-center" style="width: 85px;">Cant.</th>
+                                        <th class="text-right" style="width: 70px;">P.U.</th>
+                                        <th class="text-right" style="width: 75px;">Subtotal</th>
+                                        <th class="text-center" style="width: 35px;"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="cart-items-tbody">
+                                    <!-- Inyectado dinámicamente por pos.js -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Pie de Cobro y Totales -->
+                    <div class="pos-checkout-footer">
+                        <div class="totals-breakdown">
+                            <div class="totals-row">
+                                <span>Subtotal (sin IVA):</span>
+                                <span id="calc-subtotal">$0.00</span>
+                            </div>
+                            <div class="totals-row">
+                                <span>IVA (16% trasl.):</span>
+                                <span id="calc-iva">$0.00</span>
+                            </div>
+                            <div class="totals-row main-total-row">
+                                <span>TOTAL:</span>
+                                <span id="calc-total">$0.00</span>
+                            </div>
+                        </div>
+
+                        <button class="btn-checkout-action" onclick="window.POS_MODULE.openCheckoutModal()">
+                            💳 COBRAR TICKET [F10]
+                        </button>
+
+                        <div class="checkout-aux-actions">
+                            <button class="btn-aux" onclick="window.POS_MODULE.cycleNextCart()">
+                                🔄 Alternar Carrito [F2]
+                            </button>
+                            <button class="btn-aux" onclick="window.POS_MODULE.clearActiveCart()">
+                                🗑️ Limpiar Carrito [Esc]
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ================= PESTAÑA 2: ALMACÉN E INVENTARIO (Fase 4 Completa) ================= -->
+        <section id="tab-inventario" class="app-tab-section">
+            <div class="inventory-workspace-container">
+                
+                <!-- KPI Bar Superior de Almacén -->
+                <div class="dashboard-kpi-bar">
+                    <div class="kpi-card">
+                        <span class="kpi-title">Total Artículos</span>
+                        <span class="kpi-value" id="stat-total-products">0</span>
+                        <span class="kpi-subtext">Catálogo activo</span>
+                    </div>
+                    <div class="kpi-card">
+                        <span class="kpi-title">Valorización Almacén</span>
+                        <span class="kpi-value" id="stat-total-value">$0.00 MXN</span>
+                        <span class="kpi-subtext">Costo adquisición</span>
+                    </div>
+                    <div class="kpi-card alert-kpi">
+                        <span class="kpi-title">Stock Crítico</span>
+                        <span class="kpi-value" id="stat-low-stock-count">0</span>
+                        <span class="kpi-subtext">Alerta de reorden</span>
+                    </div>
+                    <div class="kpi-card">
+                        <span class="kpi-title">Familias / Líneas</span>
+                        <span class="kpi-value" id="stat-total-categories">0</span>
+                        <span class="kpi-subtext">Categorías activas</span>
+                    </div>
+                </div>
+
+                <!-- Barra de Sub-pestañas de Inventario -->
+                <nav class="inventory-subtabs-bar">
+                    <button class="subtab-btn active" data-subtab="subtab-inv-catalogo">📦 Catálogo y Existencias</button>
+                    <button class="subtab-btn" data-subtab="subtab-inv-masters">🏷️ Marcas y Categorías</button>
+                    <button class="subtab-btn" data-subtab="subtab-inv-entradas">📥 Entradas / Reabastecimiento</button>
+                    <button class="subtab-btn" data-subtab="subtab-inv-mermas">📉 Control de Mermas</button>
+                    <button class="subtab-btn" data-subtab="subtab-inv-kardex">📋 Kardex Auditable</button>
+                    <button class="subtab-btn" data-subtab="subtab-inv-import-export">🔄 Carga Masiva y Respaldos</button>
+                </nav>
+
+                <!-- Sub-pestaña 2.1: Catálogo de Productos -->
+                <div id="subtab-inv-catalogo" class="inventory-subtab-pane active">
+                    <div class="inventory-panel-container">
+                        <div class="inventory-toolbar">
+                            <div class="search-filters-group">
+                                <input type="text" id="catalog-search-input" class="input-search-field" placeholder="🔍 Buscar por nombre comercial, código de barras o SKU... [F1]">
+                                <select id="catalog-category-filter" class="select-filter-field">
+                                    <option value="">Todas las Categorías</option>
+                                </select>
+                                <select id="catalog-brand-filter" class="select-filter-field">
+                                    <option value="">Todas las Marcas</option>
+                                </select>
+                                <label class="checkbox-filter-label">
+                                    <input type="checkbox" id="catalog-low-stock-only"> ⚠️ Solo Alerta Stock Crítico
+                                </label>
+                            </div>
+                            <div style="display: flex; gap: 8px;">
+                                <button class="btn-secondary" style="padding: 7px 12px; font-size: 0.8rem; font-weight: 600; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; cursor: pointer;" onclick="if(window.recargarCatalogoCompleto160){window.recargarCatalogoCompleto160(true).then(()=>{window.INVENTORY_MODULE.reloadCatalogTable();window.INVENTORY_MODULE.showToast('¡Catálogo oficial de 160 artículos restablecido!','success');});}" title="Sincroniza y asegura los 160 productos base en la base de datos">
+                                    🔄 Sincronizar Catálogo (160 Arts.)
+                                </button>
+                                <button class="btn-primary-action" onclick="window.INVENTORY_MODULE.openProductModal()">
+                                    ➕ Nuevo Producto [F2]
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive-box">
+                            <table class="data-table-custom" id="products-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 140px;">Código / SKU</th>
+                                        <th>Artículo / Descripción Técnica</th>
+                                        <th style="width: 140px;">Categoría</th>
+                                        <th style="width: 110px;">Marca</th>
+                                        <th style="width: 100px;" class="text-right">Costo</th>
+                                        <th style="width: 100px;" class="text-right">Venta</th>
+                                        <th style="width: 130px;" class="text-center">Existencia</th>
+                                        <th style="width: 90px;" class="text-center">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="products-table-tbody">
+                                    <!-- Inyección dinámica por inventory.js -->
+                                </tbody>
+                            </table>
+                            <div id="products-empty-state" style="display: none; padding: 40px; text-align: center; color: #64748b;">
+                                <h3>No se encontraron artículos con los criterios seleccionados.</h3>
+                                <p>Intente modificar el término de búsqueda o limpiar los filtros.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sub-pestaña 2.2: Marcas y Categorías -->
+                <div id="subtab-inv-masters" class="inventory-subtab-pane">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; height: 100%;">
+                        <!-- Panel Marcas -->
+                        <div class="inventory-panel-container">
+                            <div class="inventory-toolbar">
+                                <div>
+                                    <h3 style="color: var(--color-primary); font-size: 0.95rem; font-weight: 800;">Marcas Homologadas (12 Marcas)</h3>
+                                    <p style="font-size: 0.72rem; color: var(--color-slate-light);">Proveedores directos y fabricantes oficiales de Papelería A B C</p>
+                                </div>
+                                <button class="btn-primary-action" onclick="window.MASTERS_MODULE.openMarcaModal()">
+                                    ➕ Nueva Marca
+                                </button>
+                            </div>
+                            <div class="table-responsive-box">
+                                <table class="data-table-custom">
+                                    <thead>
+                                        <tr>
+                                            <th>Marca</th>
+                                            <th>Origen</th>
+                                            <th>Descripción</th>
+                                            <th class="text-center" style="width: 60px;">Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="marcas-table-tbody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Panel Categorías -->
+                        <div class="inventory-panel-container">
+                            <div class="inventory-toolbar">
+                                <div>
+                                    <h3 style="color: var(--color-primary); font-size: 0.95rem; font-weight: 800;">Categorías y Familias (8 Categorías)</h3>
+                                    <p style="font-size: 0.72rem; color: var(--color-slate-light);">Agrupación lógica para reportes, catálogo y mostrador POS</p>
+                                </div>
+                                <button class="btn-primary-action" onclick="window.MASTERS_MODULE.openCategoriaModal()">
+                                    ➕ Nueva Categoría
+                                </button>
+                            </div>
+                            <div class="table-responsive-box">
+                                <table class="data-table-custom">
+                                    <thead>
+                                        <tr>
+                                            <th>Categoría</th>
+                                            <th>Alcance y Definición</th>
+                                            <th class="text-center" style="width: 60px;">Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="categorias-table-tbody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sub-pestaña 2.3: Entradas / Reabastecimiento -->
+                <div id="subtab-inv-entradas" class="inventory-subtab-pane">
+                    <div class="form-card-container">
+                        <h2 class="form-header-title">📥 Registro de Entrada de Mercancía / Reabastecimiento</h2>
+                        <p class="form-header-desc">
+                            Ingrese las compras recibidas de proveedores mayoristas para actualizar existencias y asentar el costo contable en el Kardex auditable.
+                        </p>
+
+                        <form id="form-entrada-mercancia" onsubmit="window.MOVEMENTS_MODULE.handleEntradaFormSubmit(event)">
+                            <div class="form-group-field">
+                                <label for="entrada-producto-select">Artículo a Ingresar *</label>
+                                <select id="entrada-producto-select" class="form-control-select" onchange="window.MOVEMENTS_MODULE.onEntradaProductChange()" required>
+                                    <option value="">-- Seleccionar Artículo --</option>
+                                </select>
+                            </div>
+
+                            <div class="form-grid-2col">
+                                <div class="form-group-field">
+                                    <label for="entrada-cantidad">Cantidad Recibida (<span id="entrada-unidad-display">piezas</span>) *</label>
+                                    <input type="number" id="entrada-cantidad" class="form-control-input" step="1" min="1" placeholder="Ej. 50" oninput="window.MOVEMENTS_MODULE.calcularSubtotalEntrada()" required>
+                                </div>
+                                <div class="form-group-field">
+                                    <label for="entrada-costo-unitario">Costo Unitario de Compra ($ MXN) *</label>
+                                    <input type="number" id="entrada-costo-unitario" class="form-control-input" step="0.01" min="0" placeholder="0.00" oninput="window.MOVEMENTS_MODULE.calcularSubtotalEntrada()" required>
+                                </div>
+                            </div>
+
+                            <div class="form-grid-2col">
+                                <div class="form-group-field">
+                                    <label for="entrada-proveedor-select">Proveedor Mayorista / Fabricante</label>
+                                    <select id="entrada-proveedor-select" class="form-control-select">
+                                        <option value="">-- Seleccionar Proveedor --</option>
+                                    </select>
+                                </div>
+                                <div class="form-group-field">
+                                    <label for="entrada-folio-factura">Folio de Factura / Remisión de Entrega</label>
+                                    <input type="text" id="entrada-folio-factura" class="form-control-input" placeholder="Ej. FAC-2026-9812">
+                                </div>
+                            </div>
+
+                            <div class="subtotal-calc-box">
+                                <span style="font-size: 0.85rem; font-weight: 700; color: var(--color-slate-dark);">Inversión Total de la Entrada:</span>
+                                <span id="entrada-subtotal-display" style="font-size: 1.2rem; font-weight: 800; color: var(--color-emerald);">$0.00 MXN</span>
+                            </div>
+
+                            <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                                <button type="button" class="btn-secondary" onclick="document.getElementById('form-entrada-mercancia').reset()">Limpiar Formulario</button>
+                                <button type="submit" class="btn-primary-action" style="padding: 9px 20px;">📥 Confirmar y Asentar Entrada en Kardex</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Sub-pestaña 2.4: Control de Mermas y Bajas -->
+                <div id="subtab-inv-mermas" class="inventory-subtab-pane">
+                    <div class="form-card-container">
+                        <h2 class="form-header-title" style="color: var(--color-red);">📉 Registro y Control de Mermas / Bajas de Inventario</h2>
+                        <p class="form-header-desc">
+                            Desincorpore del inventario aquellos artículos defectuosos de origen, mercancía maltratada por manipulación o mermas con justificación obligatoria (RF-04).
+                        </p>
+
+                        <form id="form-merma" onsubmit="window.MOVEMENTS_MODULE.handleMermaFormSubmit(event)">
+                            <div class="form-group-field">
+                                <label for="merma-producto-select">Artículo Dañado / A Desincorporar *</label>
+                                <select id="merma-producto-select" class="form-control-select" onchange="window.MOVEMENTS_MODULE.onMermaProductChange()" required>
+                                    <option value="">-- Seleccionar Artículo --</option>
+                                </select>
+                                <small style="color: var(--color-slate-light); margin-top: 3px; display: block;">
+                                    Stock Actual Disponible para Baja: <strong id="merma-stock-disponible" style="color: var(--color-primary);">0</strong>
+                                </small>
+                            </div>
+
+                            <div class="form-grid-2col">
+                                <div class="form-group-field">
+                                    <label for="merma-cantidad">Cantidad a Desincorporar *</label>
+                                    <input type="number" id="merma-cantidad" class="form-control-input" step="1" min="1" placeholder="Ej. 2" required>
+                                </div>
+                                <div class="form-group-field">
+                                    <label for="merma-motivo-select">Motivo Operativo de la Baja *</label>
+                                    <select id="merma-motivo-select" class="form-control-select" required>
+                                        <option value="">-- Seleccionar Motivo --</option>
+                                        <option value="Daño por manipulación o exhibición">Daño físico / rotura en exhibición</option>
+                                        <option value="Defecto de fábrica o tinta seca">Defecto de fabricación / tinta seca</option>
+                                        <option value="Caducidad de adhesivo / pegamento">Caducidad / deterioro de pegamentos</option>
+                                        <option value="Diferencia en auditoría física">Ajuste por faltante en conteo físico</option>
+                                        <option value="Uso interno operativo de papelería">Consumo interno administrativo de la tienda</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group-field">
+                                <label for="merma-justificacion">Justificación y Evidencia del Incidente *</label>
+                                <textarea id="merma-justificacion" class="form-control-textarea" rows="2" placeholder="Detalle las causas del daño..." required></textarea>
+                            </div>
+
+                            <div class="form-group-field">
+                                <label for="merma-responsable">Responsable de Autorización *</label>
+                                <input type="text" id="merma-responsable" class="form-control-input" value="Gerardo Cabrera Morales (Líder Técnico & Almacén)" required>
+                            </div>
+
+                            <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                                <button type="button" class="btn-secondary" onclick="document.getElementById('form-merma').reset()">Cancelar</button>
+                                <button type="submit" class="btn-primary-action" style="background: var(--color-red); padding: 9px 20px;">📉 Asentar Merma en Kardex</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Sub-pestaña 2.5: Kardex Auditable -->
+                <div id="subtab-inv-kardex" class="inventory-subtab-pane">
+                    <div class="inventory-panel-container">
+                        <div class="inventory-toolbar">
+                            <div>
+                                <h3 style="color: var(--color-primary); font-size: 0.95rem; font-weight: 800;">📋 Kardex y Libro Mayor de Movimientos</h3>
+                                <p style="font-size: 0.72rem; color: var(--color-slate-light);">Auditoría inmutable de todas las transacciones: compras, ventas mostrador, mermas y ajustes (RF-07)</p>
+                            </div>
+                            <div style="display: flex; gap: 8px; align-items: center;">
+                                <select id="kardex-producto-filter" class="select-filter-field" style="max-width: 240px;">
+                                    <option value="">Todos los Productos</option>
+                                </select>
+                                <select id="kardex-tipo-filter" class="select-filter-field">
+                                    <option value="">Todos los Tipos</option>
+                                    <option value="VENTA_MOSTRADOR">Venta Mostrador</option>
+                                    <option value="ENTRADA_COMPRA">Entrada por Compra</option>
+                                    <option value="MERMA_BAJA">Merma / Baja</option>
+                                    <option value="INVENTARIO_INICIAL">Inventario Inicial</option>
+                                </select>
+                                <button class="btn-secondary" onclick="window.MOVEMENTS_MODULE.reloadKardexTable()">🔄 Actualizar</button>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive-box">
+                            <table class="data-table-custom">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 130px;">Fecha y Hora</th>
+                                        <th>Artículo</th>
+                                        <th style="width: 130px;">Tipo Transacción</th>
+                                        <th style="width: 80px;" class="text-center">Cantidad</th>
+                                        <th style="width: 80px;" class="text-center">Stock Previo</th>
+                                        <th style="width: 90px;" class="text-center">Stock Resultante</th>
+                                        <th>Referencia / Comprobante</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="kardex-full-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sub-pestaña 2.6: Carga Masiva y Respaldos -->
+                <div id="subtab-inv-import-export" class="inventory-subtab-pane">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: 1000px; margin: 0 auto; width: 100%;">
+                        <!-- Tarjeta CSV -->
+                        <div class="inventory-panel-container">
+                            <h3 class="form-header-title">📊 Intercambio de Catálogo en CSV / Excel</h3>
+                            <p class="form-header-desc">
+                                Descargue el catálogo de Papelería A B C con compatibilidad total para Microsoft Excel (UTF-8 BOM) o cargue por lote cientos de nuevos artículos.
+                            </p>
+                            <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
+                                <button class="btn-primary-action" style="justify-content: center; padding: 10px;" onclick="window.IMPORT_EXPORT_MODULE.exportarCatalogoCSV()">
+                                    📥 Exportar Catálogo Actual (.CSV)
+                                </button>
+                                <button class="btn-secondary" style="padding: 8px;" onclick="window.IMPORT_EXPORT_MODULE.descargarPlantillaCSV()">
+                                    📄 Descargar Plantilla Modelo (.CSV)
+                                </button>
+                                <hr style="border: none; border-top: 1px solid var(--color-border-subtle); margin: 4px 0;">
+                                <div class="form-group-field">
+                                    <label for="input-csv-file">Subir Archivo CSV con Nuevos Productos:</label>
+                                    <input type="file" id="input-csv-file" accept=".csv" class="form-control-input" onchange="window.IMPORT_EXPORT_MODULE.handleCSVFileInput(event)">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tarjeta Respaldo Snapshot JSON -->
+                        <div class="inventory-panel-container">
+                            <h3 class="form-header-title">💾 Respaldo y Recuperación Local (RNF-06)</h3>
+                            <p class="form-header-desc">
+                                Copia de seguridad snapshot de la base de datos IndexedDB completa (13 Object Stores: productos, ventas, turnos, marcas, mermas y kardex).
+                            </p>
+                            <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
+                                <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; padding: 12px; font-size: 0.78rem; color: #1e40af;">
+                                    ℹ️ <b>Tolerancia a Fallos Offline:</b> La persistencia reside localmente en el motor IndexedDB de su navegador web.
+                                </div>
+                                <button class="btn-primary-action" style="background: var(--color-primary); justify-content: center; padding: 12px;" onclick="window.IMPORT_EXPORT_MODULE.exportarRespaldoJSON()">
+                                    💾 Generar Respaldo Total Snapshot (.JSON)
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Tarjeta SQL / SQLite 3 Oficial -->
+                        <div class="inventory-panel-container" style="grid-column: span 2; margin-top: 6px;">
+                            <h3 class="form-header-title">🗄️ Base de Datos Relacional SQL (SQLite 3 Oficial)</h3>
+                            <p class="form-header-desc">
+                                Base de datos relacional normalizada en Tercera Forma Normal (3FN). Aloja los 160 artículos reales, 8 categorías, 12 marcas, Kardex inmutable y control de turnos. Compatible con SQLiteStudio, DBeaver, Python y navegadores web.
+                            </p>
+                            <div style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap;">
+                                <button class="btn-primary-action" style="background: #0f766e; padding: 9px 16px;" onclick="window.POS_DB.exportarSQL()">
+                                    📥 Descargar Script SQL Completo (.SQL)
+                                </button>
+                                <a href="database/papeleria_pos.db" download class="btn-secondary" style="padding: 9px 16px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; font-weight: 600;">
+                                    💾 Descargar Archivo SQLite 3 (.DB)
+                                </a>
+                                <button class="btn-secondary" style="padding: 9px 16px;" onclick="window.recargarCatalogoCompleto160(true).then(()=>{window.INVENTORY_MODULE.reloadCatalogTable();window.INVENTORY_MODULE.showToast('¡Catálogo de 160 artículos restablecido en motor SQL!','success');})">
+                                    🔄 Restablecer 160 Artículos en Motor Local
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ================= PESTAÑA 3: CONTROL DE CAJA ================= -->
+        <section id="tab-caja" class="app-tab-section">
+            <div class="cash-workspace-container">
+                <div style="max-width: 900px; margin: 0 auto; width: 100%;">
+                    <h2 style="font-size: 1.15rem; color: var(--color-primary); margin-bottom: 12px;">Control de Turnos y Balance de Caja (RF-08)</h2>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 18px;">
+                        <div style="background: #ffffff; border: 1px solid var(--color-border); border-radius: 8px; padding: 14px;">
+                            <small style="color: var(--color-slate-light); font-weight: bold; font-size: 0.7rem;">ESTADO DEL TURNO</small>
+                            <div id="cash-shift-status" style="font-size: 1.1rem; font-weight: 800; color: var(--color-emerald); margin-top: 2px;">TURNO ABIERTO</div>
+                            <small style="color: var(--color-slate-light); font-size: 0.72rem;">Cajero: <span id="cash-cashier-name">Gerardo Cabrera</span></small>
+                        </div>
+                        <div style="background: #ffffff; border: 1px solid var(--color-border); border-radius: 8px; padding: 14px;">
+                            <small style="color: var(--color-slate-light); font-weight: bold; font-size: 0.7rem;">FONDO INICIAL DE APERTURA</small>
+                            <div id="cash-initial-fund" style="font-size: 1.1rem; font-weight: 800; color: var(--color-primary); margin-top: 2px;">$500.00</div>
+                            <small style="color: var(--color-slate-light); font-size: 0.72rem;">Apertura: <span id="cash-open-date">Hoy</span></small>
+                        </div>
+                        <div style="background: #ffffff; border: 1px solid var(--color-border); border-radius: 8px; padding: 14px;">
+                            <small style="color: var(--color-slate-light); font-weight: bold; font-size: 0.7rem;">VENTAS EN EFECTIVO</small>
+                            <div id="cash-sales-cash" style="font-size: 1.1rem; font-weight: 800; color: var(--color-emerald); margin-top: 2px;">$0.00</div>
+                            <small style="color: var(--color-slate-light); font-size: 0.72rem;">Tarjetas: <span id="cash-sales-card">$0.00</span></small>
+                        </div>
+                    </div>
+
+                    <div style="background: #ffffff; border: 2px solid var(--color-border); border-radius: 10px; padding: 20px;">
+                        <h3 style="font-size: 0.95rem; color: var(--color-primary); margin-bottom: 8px;">Arqueo y Cierre de Jornada</h3>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 0.88rem;">
+                            <span>Efectivo Total Esperado en Cajón:</span>
+                            <b id="cash-expected-drawer" style="font-size: 1.2rem; color: var(--color-primary);">$500.00</b>
+                        </div>
+                        <div style="margin-bottom: 12px;">
+                            <label style="display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px;">Efectivo Físico Contado en Caja:</label>
+                            <input type="number" id="input-arqueo-contado" step="0.5" placeholder="Ingrese monto contado en cajón..." style="width: 100%; padding: 9px; border: 2px solid var(--color-border); border-radius: 6px; font-size: 1rem; font-weight: bold;" oninput="window.CASH_MODULE.calcularArqueoCierre()">
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; font-size: 0.88rem;">
+                            <span>Diferencia de Caja:</span>
+                            <b id="arqueo-diferencia-display" style="font-size: 0.95rem; color: var(--color-slate-light);">$0.00</b>
+                        </div>
+                        <button class="btn-checkout-action" style="background: var(--color-primary); padding: 10px;" onclick="window.CASH_MODULE.cerrarTurnoCaja()">
+                            🔒 Registrar Corte y Cerrar Turno
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PESTAÑA 4: CONFIGURACIÓN ================= -->
+        <section id="tab-configuracion" class="app-tab-section">
+            <div class="cash-workspace-container">
+                <div style="max-width: 820px; margin: 0 auto; width: 100%;">
+                    <h2 style="font-size: 1.15rem; color: var(--color-primary); margin-bottom: 14px;">Configuración de "Papelería A B C"</h2>
+                    
+                    <div style="background: #ffffff; border: 1px solid var(--color-border); border-radius: 8px; padding: 18px; margin-bottom: 16px;">
+                        <h3 style="font-size: 0.95rem; color: var(--color-primary); margin-bottom: 10px;">Datos Institucionales del Negocio</h3>
+                        <table style="width: 100%; font-size: 0.84rem; border-collapse: collapse;">
+                            <tr><td style="padding: 6px 0; color: var(--color-slate-light); width: 180px;">Nombre Comercial:</td><td><b>Papelería A B C</b></td></tr>
+                            <tr><td style="padding: 6px 0; color: var(--color-slate-light);">RFC:</td><td><code>PABC261005ABC</code></td></tr>
+                            <tr><td style="padding: 6px 0; color: var(--color-slate-light);">Dirección:</td><td>Av. Tecnológico #120, Col. Centro, Querétaro</td></tr>
+                            <tr><td style="padding: 6px 0; color: var(--color-slate-light);">Teléfono:</td><td>442-123-4567</td></tr>
+                            <tr><td style="padding: 6px 0; color: var(--color-slate-light);">Leyenda en Ticket:</td><td>¡Gracias por su compra en Papelería A B C!</td></tr>
+                        </table>
+                    </div>
+
+                    <div style="background: #ffffff; border: 1px solid var(--color-border); border-radius: 8px; padding: 18px;">
+                        <h3 style="font-size: 0.95rem; color: var(--color-primary); margin-bottom: 6px;">Persistencia Local Offline (IndexedDB)</h3>
+                        <p style="font-size: 0.8rem; color: var(--color-slate-light); margin-bottom: 12px;">
+                            Base de datos: <code>PapeleriaABC_POS_DB</code> (Versión 2). Operación 100% offline sin servidores externos (RNF-02) con latencia de respuesta &lt; 10ms (RNF-01).
+                        </p>
+                        <button class="btn-fast-service" onclick="window.IMPORT_EXPORT_MODULE.exportarRespaldoJSON()">
+                            💾 Generar Respaldo Completo en 1-Clic
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ================= MODAL: COBRO Y PAGO DE TICKET POS ================= -->
+    <div id="modal-checkout" class="modal-overlay">
+        <div class="modal-dialog-box" style="max-width: 450px;">
+            <div class="modal-dialog-header">
+                <h3>💳 Cobro de Ticket en Mostrador</h3>
+                <button type="button" class="btn-modal-close" data-action="close" onclick="window.closeAllModals()" title="Cerrar (Esc)">&times;</button>
+            </div>
+            <div class="modal-dialog-body">
+                <div style="text-align: center; margin-bottom: 16px;">
+                    <div style="font-size: 0.8rem; color: var(--color-slate-light);">TOTAL A COBRAR:</div>
+                    <div id="modal-checkout-total" style="font-size: 2rem; font-weight: 800; color: var(--color-emerald);">$0.00</div>
+                </div>
+
+                <div class="form-group-field">
+                    <label for="checkout-metodo-pago">Método de Pago:</label>
+                    <select id="checkout-metodo-pago" class="form-control-select">
+                        <option value="EFECTIVO">💵 Efectivo</option>
+                        <option value="TARJETA">💳 Tarjeta Débito / Crédito</option>
+                        <option value="TRANSFERENCIA">📱 Transferencia SPEI</option>
+                    </select>
+                </div>
+
+                <div class="form-group-field">
+                    <label for="checkout-efectivo-recibido">Monto Recibido del Cliente ($ MXN):</label>
+                    <input type="number" id="checkout-efectivo-recibido" class="form-control-input font-bold" style="font-size: 1.15rem;" step="0.5" oninput="window.POS_MODULE.calcularCambio()">
+                </div>
+
+                <div style="background: #f8fafc; border: 1px dashed var(--color-border); border-radius: 6px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+                    <span style="font-size: 0.85rem; font-weight: 700;">Cambio a Devolver:</span>
+                    <span id="checkout-cambio-devuelto" style="font-size: 1.3rem; font-weight: 800; color: var(--color-emerald);">$0.00</span>
+                </div>
+            </div>
+            <div class="modal-dialog-footer">
+                <button type="button" class="btn-secondary" data-action="close" onclick="window.closeAllModals()">Cancelar</button>
+                <button type="button" id="btn-confirmar-cobro" class="btn-primary-action" style="padding: 8px 18px;" onclick="window.POS_MODULE.confirmarVenta()">
+                    ✓ Confirmar y Emitir Ticket
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= MODAL: TICKET TÉRMICO PREVIEW ================= -->
+    <div id="modal-ticket-preview" class="modal-overlay">
+        <div class="modal-dialog-box" style="max-width: 360px;">
+            <div class="modal-dialog-header">
+                <h3>🖨️ Ticket de Venta Emitido</h3>
+                <button type="button" class="btn-modal-close" data-action="close" onclick="window.closeAllModals()" title="Cerrar (Esc)">&times;</button>
+            </div>
+            <div class="modal-dialog-body" id="ticket-render-zone">
+                <!-- Inyectado dinámicamente -->
+            </div>
+            <div class="modal-dialog-footer">
+                <button type="button" class="btn-secondary" data-action="close" onclick="window.closeAllModals()">Cerrar</button>
+                <button type="button" class="btn-primary-action" onclick="window.print()">🖨️ Imprimir</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= MODAL: COPIAS E IMPRESIONES RÁPIDAS [F4] ================= -->
+    <div id="modal-servicios-copias" class="modal-overlay">
+        <div class="modal-dialog-box" style="max-width: 440px;">
+            <div class="modal-dialog-header">
+                <h3>📄 Copias e Impresiones Rápidas [F4]</h3>
+                <button type="button" class="btn-modal-close" data-action="close" onclick="window.closeAllModals()" title="Cerrar (Esc)">&times;</button>
+            </div>
+            <div class="modal-dialog-body">
+                <div class="form-group-field">
+                    <label for="input-cant-copias-bn">Fotocopias Blanco y Negro ($1.00 c/u):</label>
+                    <input type="number" id="input-cant-copias-bn" class="form-control-input font-bold" min="0" placeholder="Ej. 10">
+                </div>
+                <div class="form-group-field">
+                    <label for="input-cant-copias-color">Fotocopias / Impresión Color ($5.00 c/u):</label>
+                    <input type="number" id="input-cant-copias-color" class="form-control-input font-bold" min="0" placeholder="Ej. 2">
+                </div>
+                <div class="form-group-field">
+                    <label for="input-cant-enmicados">Enmicado Tamaño Carta ($15.00 c/u):</label>
+                    <input type="number" id="input-cant-enmicados" class="form-control-input font-bold" min="0" placeholder="Ej. 1">
+                </div>
+            </div>
+            <div class="modal-dialog-footer">
+                <button type="button" class="btn-secondary" data-action="close" onclick="window.closeAllModals()">Cancelar</button>
+                <button type="button" class="btn-primary-action" onclick="window.POS_MODULE.agregarServiciosAlCarrito()">
+                    ➕ Agregar al Carrito
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= MODAL: ALTA Y EDICIÓN DE PRODUCTO ================= -->
+    <div id="modal-product-form" class="modal-overlay">
+        <div class="modal-dialog-box">
+            <div class="modal-dialog-header">
+                <h3 id="modal-product-title">Nuevo Artículo para Papelería A B C</h3>
+                <button type="button" class="btn-modal-close" data-action="close" onclick="window.closeAllModals()" title="Cerrar (Esc)">&times;</button>
+            </div>
+            <form id="form-product" onsubmit="window.INVENTORY_MODULE.handleProductFormSubmit(event)">
+                <div class="modal-dialog-body">
+                    <input type="hidden" id="prod-id">
+
+                    <div class="form-grid-2col">
+                        <div class="form-group-field">
+                            <label for="prod-barcode">Código de Barras (EAN-13 / Personalizado) *</label>
+                            <div style="display: flex; gap: 6px;">
+                                <input type="text" id="prod-barcode" class="form-control-input font-mono" placeholder="750..." required>
+                                <button type="button" class="btn-secondary" title="Generar código de barras sugerido" onclick="window.INVENTORY_MODULE.generateBarcodeEAN13()">⚡</button>
+                            </div>
+                        </div>
+                        <div class="form-group-field">
+                            <label for="prod-sku">Clave SKU Interna *</label>
+                            <input type="text" id="prod-sku" class="form-control-input font-mono" placeholder="Ej. SC-CUAD-01" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group-field">
+                        <label for="prod-nombre">Nombre Comercial del Producto *</label>
+                        <input type="text" id="prod-nombre" class="form-control-input font-bold" placeholder="Ej. Cuaderno Profesional Raya 100 Hojas Scribe" required>
+                    </div>
+
+                    <div class="form-grid-2col">
+                        <div class="form-group-field">
+                            <label for="prod-categoria">Categoría / Familia *</label>
+                            <select id="prod-categoria" class="form-control-select" required>
+                                <option value="">-- Seleccionar Categoría --</option>
+                            </select>
+                        </div>
+                        <div class="form-group-field">
+                            <label for="prod-marca">Marca Oficial *</label>
+                            <select id="prod-marca" class="form-control-select" required>
+                                <option value="">-- Seleccionar Marca --</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-grid-2col">
+                        <div class="form-group-field">
+                            <label for="prod-unidad">Unidad de Medida *</label>
+                            <select id="prod-unidad" class="form-control-select" required>
+                                <option value="">-- Seleccionar Unidad --</option>
+                            </select>
+                        </div>
+                        <div class="form-group-field">
+                            <label for="prod-precio-compra">Costo de Compra ($ MXN) *</label>
+                            <input type="number" id="prod-precio-compra" class="form-control-input" step="0.01" min="0" placeholder="0.00" required>
+                        </div>
+                    </div>
+
+                    <div class="form-grid-2col">
+                        <div class="form-group-field">
+                            <label for="prod-precio-menudeo">Precio Venta Menudeo ($ MXN) *</label>
+                            <input type="number" id="prod-precio-menudeo" class="form-control-input font-bold" step="0.01" min="0.01" placeholder="0.00" required>
+                        </div>
+                        <div class="form-group-field">
+                            <label for="prod-precio-mayoreo">Precio Venta Mayoreo ($ MXN)</label>
+                            <input type="number" id="prod-precio-mayoreo" class="form-control-input" step="0.01" min="0" placeholder="Opcional">
+                        </div>
+                    </div>
+
+                    <div class="form-grid-2col">
+                        <div class="form-group-field">
+                            <label for="prod-stock-actual">Stock Inicial / Existencia Actual *</label>
+                            <input type="number" id="prod-stock-actual" class="form-control-input" step="1" min="0" value="10" required>
+                        </div>
+                        <div class="form-group-field">
+                            <label for="prod-stock-minimo">Stock Mínimo (Alerta de Reorden) *</label>
+                            <input type="number" id="prod-stock-minimo" class="form-control-input" step="1" min="0" value="3" required>
+                        </div>
+                    </div>
+
+                    <div class="form-grid-2col" style="margin-top: 4px;">
+                        <label class="checkbox-filter-label" style="background: none; border: none; padding: 0; color: var(--color-slate-dark);">
+                            <input type="checkbox" id="prod-es-servicio"> 📄 Es servicio / copia (No descuenta stock)
+                        </label>
+                        <label class="checkbox-filter-label" style="background: none; border: none; padding: 0; color: var(--color-slate-dark);">
+                            <input type="checkbox" id="prod-permite-desglose"> 📦 Permite desglose de caja a piezas
+                        </label>
+                    </div>
+
+                    <div class="form-group-field" style="margin-top: 8px;">
+                        <label for="prod-descripcion">Descripción Adicional</label>
+                        <textarea id="prod-descripcion" class="form-control-textarea" rows="2" placeholder="Detalles de color, presentación..."></textarea>
+                    </div>
+                </div>
+
+                <div class="modal-dialog-footer">
+                    <button type="button" class="btn-secondary" data-action="close" onclick="window.closeAllModals()">Cancelar</button>
+                    <button type="submit" class="btn-primary-action">Guardar en Base de Datos</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ================= MODAL: ALTA Y EDICIÓN DE MARCA ================= -->
+    <div id="modal-marca-form" class="modal-overlay">
+        <div class="modal-dialog-box" style="max-width: 450px;">
+            <div class="modal-dialog-header">
+                <h3 id="modal-marca-title">Nueva Marca</h3>
+                <button type="button" class="btn-modal-close" data-action="close" onclick="window.closeAllModals()" title="Cerrar (Esc)">&times;</button>
+            </div>
+            <form id="form-marca" onsubmit="window.MASTERS_MODULE.handleMarcaFormSubmit(event)">
+                <div class="modal-dialog-body">
+                    <input type="hidden" id="marca-id">
+                    <div class="form-group-field">
+                        <label for="marca-nombre">Nombre de la Marca *</label>
+                        <input type="text" id="marca-nombre" class="form-control-input font-bold" placeholder="Ej. Faber-Castell" required>
+                    </div>
+                    <div class="form-group-field">
+                        <label for="marca-pais">País de Origen</label>
+                        <input type="text" id="marca-pais" class="form-control-input" placeholder="Ej. Alemania">
+                    </div>
+                    <div class="form-group-field">
+                        <label for="marca-descripcion">Descripción</label>
+                        <textarea id="marca-descripcion" class="form-control-textarea" rows="2" placeholder="Notas comerciales..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-dialog-footer">
+                    <button type="button" class="btn-secondary" data-action="close" onclick="window.closeAllModals()">Cancelar</button>
+                    <button type="submit" class="btn-primary-action">Guardar Marca</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ================= MODAL: ALTA Y EDICIÓN DE CATEGORÍA ================= -->
+    <div id="modal-categoria-form" class="modal-overlay">
+        <div class="modal-dialog-box" style="max-width: 450px;">
+            <div class="modal-dialog-header">
+                <h3 id="modal-categoria-title">Nueva Categoría</h3>
+                <button type="button" class="btn-modal-close" data-action="close" onclick="window.closeAllModals()" title="Cerrar (Esc)">&times;</button>
+            </div>
+            <form id="form-categoria" onsubmit="window.MASTERS_MODULE.handleCategoriaFormSubmit(event)">
+                <div class="modal-dialog-body">
+                    <input type="hidden" id="cat-id">
+                    <div class="form-group-field">
+                        <label for="cat-nombre">Nombre de la Categoría *</label>
+                        <input type="text" id="cat-nombre" class="form-control-input font-bold" placeholder="Ej. Papeles Especiales" required>
+                    </div>
+                    <div class="form-group-field">
+                        <label for="cat-descripcion">Descripción del Alcance</label>
+                        <textarea id="cat-descripcion" class="form-control-textarea" rows="2" placeholder="Alcance de la familia..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-dialog-footer">
+                    <button type="button" class="btn-secondary" data-action="close" onclick="window.closeAllModals()">Cancelar</button>
+                    <button type="submit" class="btn-primary-action">Guardar Categoría</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Contenedor flotante de notificaciones Toast -->
+    <div id="toast-container"></div>
+
+    <!-- Scripts de la arquitectura unificada POS & Almacén Papelería A B C -->
+    <script src="js/db.js"></script>
+    <script src="js/inventory.js"></script>
+    <script src="js/catalog_masters.js"></script>
+    <script src="js/stock_movements.js"></script>
+    <script src="js/import_export.js"></script>
+    <script src="js/pos.js"></script>
+    <script src="js/cash.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
