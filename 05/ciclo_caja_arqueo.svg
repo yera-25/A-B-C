@@ -1,0 +1,130 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 700" width="1100" height="700">
+  <defs>
+    <style>
+      .title { font-family: 'Segoe UI', Arial, sans-serif; font-size: 22px; font-weight: 800; fill: #152c4a; }
+      .subtitle { font-family: 'Segoe UI', Arial, sans-serif; font-size: 13px; font-weight: 600; fill: #64748b; }
+      .node-box { rx: 8px; stroke-width: 2px; }
+      .node-title { font-family: 'Segoe UI', Arial, sans-serif; font-size: 13px; font-weight: 700; }
+      .node-desc { font-family: 'Segoe UI', Arial, sans-serif; font-size: 11px; fill: #475569; }
+      .arrow { stroke: #152c4a; stroke-width: 2.5px; fill: none; marker-end: url(#arrowhead-navy); }
+      .arrow-branch { stroke: #0284c7; stroke-width: 2px; fill: none; marker-end: url(#arrowhead-blue); }
+      .badge { font-family: 'Segoe UI', Arial, sans-serif; font-size: 10px; font-weight: 800; }
+    </style>
+    <marker id="arrowhead-navy" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#152c4a" />
+    </marker>
+    <marker id="arrowhead-blue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#0284c7" />
+    </marker>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#0f172a" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1100" height="700" fill="#f8fafc" />
+
+  <!-- Header -->
+  <rect x="40" y="30" width="1020" height="70" rx="10" fill="#ffffff" stroke="#e2e8f0" filter="url(#shadow)" />
+  <text x="65" y="65" class="title">CICLO DE CONTROL DE CAJA, ARQUEO CIEGO Y CORTE Z</text>
+  <text x="65" y="85" class="subtitle">Papelería A B C — Fase 5: Sprint 2 (Módulo de Ventas &amp; Auditoría de Caja | RF-08)</text>
+
+  <!-- Phase 1: Apertura -->
+  <g transform="translate(60, 140)" filter="url(#shadow)">
+    <rect width="280" height="110" class="node-box" fill="#ffffff" stroke="#152c4a" />
+    <rect width="280" height="26" rx="8" fill="#152c4a" />
+    <text x="15" y="18" fill="#ffffff" class="badge">1. APERTURA DE TURNO DE CAJA</text>
+    <text x="15" y="48" class="node-title" fill="#152c4a">Fondo Inicial de Apertura</text>
+    <text x="15" y="66" class="node-desc">Asignación de Cajero (Gerardo Cabrera)</text>
+    <text x="15" y="80" class="node-desc">Fondo físico predeterminado: $500.00 MXN</text>
+    <text x="15" y="94" class="node-desc">Estado de turno: ABIERTO con timestamp ISO</text>
+  </g>
+
+  <!-- Arrow 1 to 2 -->
+  <line x1="340" y1="195" x2="410" y2="195" class="arrow" />
+
+  <!-- Phase 2: Flujo Operativo en Mostrador -->
+  <g transform="translate(420, 125)" filter="url(#shadow)">
+    <rect width="320" height="140" class="node-box" fill="#ffffff" stroke="#0284c7" />
+    <rect width="320" height="26" rx="8" fill="#0284c7" />
+    <text x="15" y="18" fill="#ffffff" class="badge">2. FLUJO DINÁMICO DE EFECTIVO</text>
+    <text x="15" y="48" class="node-title" fill="#0284c7">Operaciones en Jornada Comercial</text>
+    <text x="15" y="66" class="node-desc">(+) Ventas cobradas en Efectivo</text>
+    <text x="15" y="80" class="node-desc">(+) Entradas manuales (Dotación / Cambio)</text>
+    <text x="15" y="94" class="node-desc">(-) Retiros manuales (Gastos menores / Proveedor)</text>
+    <text x="15" y="110" class="node-desc">(i) Ventas electrónicas registradas (Tarjetas / SPEI)</text>
+    <text x="15" y="124" class="node-desc"><b>Efectivo Esperado = Fondo + VentasEfec + Entradas - Retiros</b></text>
+  </g>
+
+  <!-- Arrow 2 to 3 -->
+  <line x1="740" y1="195" x2="810" y2="195" class="arrow" />
+
+  <!-- Phase 3: Conciliacion Rapida -->
+  <g transform="translate(820, 130)" filter="url(#shadow)">
+    <rect width="240" height="130" class="node-box" fill="#ffffff" stroke="#b45309" />
+    <rect width="240" height="26" rx="8" fill="#b45309" />
+    <text x="15" y="18" fill="#ffffff" class="badge">3. CONCILIACIÓN RÁPIDA DE CAJA</text>
+    <text x="15" y="48" class="node-title" fill="#b45309">Conteo Físico Directo</text>
+    <text x="15" y="66" class="node-desc">Captura directa de total en gaveta</text>
+    <text x="15" y="80" class="node-desc">Botón "Cuadre Exacto" en 1 clic</text>
+    <text x="15" y="94" class="node-desc">Sin fricción de conteo individual</text>
+    <text x="15" y="110" class="node-desc">Cierre rápido, ágil y eficiente</text>
+  </g>
+
+  <!-- Vertical connector down -->
+  <path d="M 940 260 L 940 330 L 940 350" class="arrow" />
+
+  <!-- Phase 4: Algoritmo de Cuadratura -->
+  <g transform="translate(720, 360)" filter="url(#shadow)">
+    <rect width="340" height="130" class="node-box" fill="#ffffff" stroke="#152c4a" />
+    <rect width="340" height="26" rx="8" fill="#152c4a" />
+    <text x="15" y="18" fill="#ffffff" class="badge">4. EVALUACIÓN Y CUADRATURA</text>
+    <text x="15" y="48" class="node-title" fill="#152c4a">Diferencia = Contado Físico - Esperado</text>
+    <text x="15" y="70" class="node-desc" fill="#3a8e63"><b>[OK] Exacto ($0.00):</b> Corte Cuadrado Perfecto</text>
+    <text x="15" y="90" class="node-desc" fill="#0284c7"><b>+ Sobrante (&gt;$0.00):</b> Excedente en gaveta</text>
+    <text x="15" y="110" class="node-desc" fill="#d9534f"><b>- Faltante (&lt;$0.00):</b> Alerta de discrepancia</text>
+  </g>
+
+  <!-- Arrow 4 to 5 -->
+  <line x1="720" y1="425" x2="620" y2="425" class="arrow" />
+
+  <!-- Phase 5: Confirmación y Corte Z -->
+  <g transform="translate(320, 360)" filter="url(#shadow)">
+    <rect width="290" height="130" class="node-box" fill="#ffffff" stroke="#3a8e63" />
+    <rect width="290" height="26" rx="8" fill="#3a8e63" />
+    <text x="15" y="18" fill="#ffffff" class="badge">5. EMISIÓN DE CORTE Z OFICIAL</text>
+    <text x="15" y="48" class="node-title" fill="#3a8e63">Cierre Formal de Turno</text>
+    <text x="15" y="66" class="node-desc">Generación Folio CORTE-Z-XXXX</text>
+    <text x="15" y="80" class="node-desc">Comprobante térmico de auditoría</text>
+    <text x="15" y="94" class="node-desc">Desglose de efectivo vs electrónico</text>
+    <text x="15" y="110" class="node-desc">Firmas de Cajero y Supervisor</text>
+  </g>
+
+  <!-- Arrow 5 to 6 -->
+  <line x1="320" y1="425" x2="220" y2="425" class="arrow" />
+
+  <!-- Phase 6: Nuevo Turno / Ciclo Siguiente -->
+  <g transform="translate(60, 360)" filter="url(#shadow)">
+    <rect width="150" height="130" class="node-box" fill="#ffffff" stroke="#64748b" />
+    <rect width="150" height="26" rx="8" fill="#64748b" />
+    <text x="15" y="18" fill="#ffffff" class="badge">6. REAPERTURA</text>
+    <text x="15" y="50" class="node-title" fill="#1e293b">Nuevo Turno</text>
+    <text x="15" y="70" class="node-desc">Asignación de</text>
+    <text x="15" y="84" class="node-desc">fondo inicial para</text>
+    <text x="15" y="98" class="node-desc">siguiente cajero</text>
+    <text x="15" y="114" class="node-desc">o jornada.</text>
+  </g>
+
+  <!-- Cycle back arrow -->
+  <path d="M 135 360 L 135 290 L 135 260" class="arrow-branch" />
+
+  <!-- Bottom summary box -->
+  <g transform="translate(60, 520)" filter="url(#shadow)">
+    <rect width="1000" height="130" rx="8" fill="#ffffff" stroke="#e2e8f0" />
+    <text x="25" y="30" class="node-title" fill="#152c4a">Cumplimiento Normativo y de Auditoría Financiera (RF-08):</text>
+    <text x="25" y="52" class="node-desc">• La conciliación rápida permite al cajero ingresar el total físico directo o copiar el esperado con 1 clic para cuadre inmediato.</text>
+    <text x="25" y="72" class="node-desc">• Todo corte Z genera un registro permanente inmutable en la tabla de base de datos cortes_caja con fecha, hora y montos.</text>
+    <text x="25" y="92" class="node-desc">• Se elimina la calculadora por denominaciones para maximizar la velocidad y eficiencia en el cambio de turno comercial.</text>
+    <text x="25" y="112" class="node-desc">• Permite reimpresión térmica del comprobante Z en cualquier momento para revisiones contables o auditorías del dueño.</text>
+  </g>
+</svg>
