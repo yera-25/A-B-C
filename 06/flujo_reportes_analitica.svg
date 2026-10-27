@@ -1,0 +1,136 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 710" width="1100" height="710">
+  <defs>
+    <style>
+      .title { font-family: 'Segoe UI', Arial, sans-serif; font-size: 21px; font-weight: 800; fill: #152c4a; }
+      .subtitle { font-family: 'Segoe UI', Arial, sans-serif; font-size: 12.5px; font-weight: 600; fill: #64748b; }
+      .node-box { rx: 8px; stroke-width: 1.8px; }
+      .node-title { font-family: 'Segoe UI', Arial, sans-serif; font-size: 13px; font-weight: 700; }
+      .node-desc { font-family: 'Segoe UI', Arial, sans-serif; font-size: 11px; fill: #334155; }
+      .badge { font-family: 'Segoe UI', Arial, sans-serif; font-size: 10px; font-weight: 800; }
+    </style>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0f172a" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1100" height="710" fill="#f8fafc"/>
+  <rect x="20" y="15" width="1060" height="680" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+
+  <!-- Header -->
+  <text x="45" y="52" class="title">FLUJO DE PROCESAMIENTO ANALÍTICO, BALANCE DIARIO Y EXPORTACIÓN CSV</text>
+  <text x="45" y="73" class="subtitle">Papelería A B C — Fase 6: Sprint 3 (Inteligencia Comercial, Top Productos y Balance Financiero | RF-06 / RF-07)</text>
+  <line x1="45" y1="86" x2="1055" y2="86" stroke="#e2e8f0" stroke-width="1.5"/>
+
+  <!-- STEP 1: Fuentes Transaccionales -->
+  <g transform="translate(45, 105)" filter="url(#shadow)">
+    <rect width="220" height="180" class="node-box" fill="#f8fafc" stroke="#152c4a"/>
+    <rect width="220" height="30" rx="8" fill="#152c4a"/>
+    <text x="12" y="20" font-family="'Segoe UI', Arial" font-size="11.5" font-weight="800" fill="#ffffff">1. FUENTES TRANSACCIONALES</text>
+    <text x="14" y="54" class="node-title" fill="#152c4a">Tablas Relacionales (3FN)</text>
+    <text x="14" y="75" class="node-desc">• ventas (id, folio, fecha, total, pago)</text>
+    <text x="14" y="93" class="node-desc">• detalle_ventas (item, p.u., subtotal)</text>
+    <text x="14" y="111" class="node-desc">• productos (costo compra, stock, marca)</text>
+    <text x="14" y="129" class="node-desc">• turnos_caja y cortes_caja</text>
+    <text x="14" y="152" font-family="'Segoe UI', Arial" font-size="11" font-weight="700" fill="#0284c7">Extracción síncrona &lt;2 ms</text>
+  </g>
+
+  <!-- Arrow 1 -> 2 -->
+  <path d="M 265 195 L 305 195" stroke="#152c4a" stroke-width="2.5" fill="none"/>
+  <polygon points="305,190 315,195 305,200" fill="#152c4a"/>
+
+  <!-- STEP 2: Motor de Filtrado -->
+  <g transform="translate(315, 105)" filter="url(#shadow)">
+    <rect width="235" height="180" class="node-box" fill="#f0f9ff" stroke="#0284c7"/>
+    <rect width="235" height="30" rx="8" fill="#0284c7"/>
+    <text x="12" y="20" font-family="'Segoe UI', Arial" font-size="11.5" font-weight="800" fill="#ffffff">2. MOTOR DE FILTRADO DINÁMICO</text>
+    <text x="14" y="54" class="node-title" fill="#0369a1">Criterios Combinables en Vivo</text>
+    <text x="14" y="75" class="node-desc">• Periodos rápidos: Hoy, Ayer, 7 Días, Mes</text>
+    <text x="14" y="93" class="node-desc">• Rango personalizado: selector Desde - Hasta</text>
+    <text x="14" y="111" class="node-desc">• Filtrado por Categoría de papelería</text>
+    <text x="14" y="129" class="node-desc">• Filtrado por Método: Efectivo, Tarjeta, SPEI</text>
+    <text x="14" y="152" font-family="'Segoe UI', Arial" font-size="11" font-weight="700" fill="#0284c7">Recálculo reactivo &lt;5 ms</text>
+  </g>
+
+  <!-- Arrow 2 -> 3 -->
+  <path d="M 550 195 L 590 195" stroke="#152c4a" stroke-width="2.5" fill="none"/>
+  <polygon points="590,190 600,195 590,200" fill="#152c4a"/>
+
+  <!-- STEP 3: Agregacion Financiera -->
+  <g transform="translate(600, 105)" filter="url(#shadow)">
+    <rect width="455" height="180" class="node-box" fill="#ecfdf5" stroke="#3a8e63"/>
+    <rect width="455" height="30" rx="8" fill="#3a8e63"/>
+    <text x="12" y="20" font-family="'Segoe UI', Arial" font-size="11.5" font-weight="800" fill="#ffffff">3. AGREGACIÓN Y CÁLCULO FINANCIERO</text>
+    <text x="14" y="54" class="node-title" fill="#047857">Algoritmos de Inteligencia de Negocio y Rentabilidad</text>
+    <text x="14" y="75" class="node-desc">• Venta Neta = Suma(Ventas Confirmadas) - Descuentos Comerciales</text>
+    <text x="14" y="93" class="node-desc">• Costo Mercancía = Suma(Cantidad Vendida × Costo Adquisición Catálogo)</text>
+    <text x="14" y="111" class="node-desc" font-weight="700" fill="#065f46">• Utilidad Bruta Líquida = Venta Neta - Costo Mercancía</text>
+    <text x="14" y="129" class="node-desc">• Margen Comercial % = (Utilidad Bruta / Venta Neta) × 100</text>
+    <text x="14" y="152" font-family="'Segoe UI', Arial" font-size="11" font-weight="700" fill="#3a8e63">Ranking Top 15 Artículos: Ordenamiento por piezas y contribución</text>
+  </g>
+
+  <!-- Arrow Down from 3 to 4 -->
+  <path d="M 830 285 L 830 315 L 550 315 L 550 335" stroke="#152c4a" stroke-width="2.5" fill="none"/>
+  <polygon points="545,335 550,345 555,335" fill="#152c4a"/>
+
+  <!-- STEP 4: Vistas Especializadas y Exportacion -->
+  <g transform="translate(45, 345)" filter="url(#shadow)">
+    <rect width="1010" height="175" class="node-box" fill="#ffffff" stroke="#152c4a" stroke-width="2"/>
+    <rect width="1010" height="30" rx="8" fill="#152c4a"/>
+    <text x="14" y="20" font-family="'Segoe UI', Arial" font-size="12" font-weight="800" fill="#ffffff">4. VISTAS ANALÍTICAS Y REPORTES OFICIALES CSV (UTF-8 BOM)</text>
+
+    <!-- Subpanel 1: Balance Diario -->
+    <g transform="translate(18, 42)">
+      <rect width="230" height="115" rx="6" fill="#f8fafc" stroke="#152c4a" stroke-width="1.5"/>
+      <text x="12" y="22" class="node-title" fill="#152c4a">Balance Diario</text>
+      <text x="12" y="42" class="node-desc">• Facturación neta e IVA 16%</text>
+      <text x="12" y="58" class="node-desc">• Utilidad por jornada</text>
+      <text x="12" y="74" class="node-desc">• Canales Efectivo/Tarjeta/SPEI</text>
+      <rect x="12" y="86" width="205" height="20" rx="4" fill="#152c4a"/>
+      <text x="32" y="100" font-family="'Segoe UI', Arial" font-size="10" font-weight="700" fill="#ffffff">[Exportar Balance CSV]</text>
+    </g>
+
+    <!-- Subpanel 2: Top 15 Productos -->
+    <g transform="translate(268, 42)">
+      <rect width="230" height="115" rx="6" fill="#f0f9ff" stroke="#0284c7" stroke-width="1.5"/>
+      <text x="12" y="22" class="node-title" fill="#0284c7">Top 15 Productos</text>
+      <text x="12" y="42" class="node-desc">• Ranking por piezas vendidas</text>
+      <text x="12" y="58" class="node-desc">• Costo, venta y utilidad</text>
+      <text x="12" y="74" class="node-desc">• Barra de contribución relativa</text>
+      <rect x="12" y="86" width="205" height="20" rx="4" fill="#0284c7"/>
+      <text x="36" y="100" font-family="'Segoe UI', Arial" font-size="10" font-weight="700" fill="#ffffff">[Exportar Top CSV]</text>
+    </g>
+
+    <!-- Subpanel 3: Ventas por Categoria -->
+    <g transform="translate(518, 42)">
+      <rect width="230" height="115" rx="6" fill="#ecfdf5" stroke="#3a8e63" stroke-width="1.5"/>
+      <text x="12" y="22" class="node-title" fill="#3a8e63">Ventas por Categoría</text>
+      <text x="12" y="42" class="node-desc">• Familias de papelería</text>
+      <text x="12" y="58" class="node-desc">• Ventas por segmento</text>
+      <text x="12" y="74" class="node-desc">• Participación porcentual</text>
+      <rect x="12" y="86" width="205" height="20" rx="4" fill="#3a8e63"/>
+      <text x="24" y="100" font-family="'Segoe UI', Arial" font-size="10" font-weight="700" fill="#ffffff">[Exportar Categorías CSV]</text>
+    </g>
+
+    <!-- Subpanel 4: Auditoria de Tickets -->
+    <g transform="translate(768, 42)">
+      <rect width="225" height="115" rx="6" fill="#fffbeb" stroke="#b45309" stroke-width="1.5"/>
+      <text x="12" y="22" class="node-title" fill="#b45309">Auditoría Transaccional</text>
+      <text x="12" y="42" class="node-desc">• Folio ticket y timestamp</text>
+      <text x="12" y="58" class="node-desc">• Desglose de artículos y cajero</text>
+      <text x="12" y="74" class="node-desc">• Reimpresión térmica 1 clic</text>
+      <rect x="12" y="86" width="200" height="20" rx="4" fill="#b45309"/>
+      <text x="32" y="100" font-family="'Segoe UI', Arial" font-size="10" font-weight="700" fill="#ffffff">[Exportar Detalle CSV]</text>
+    </g>
+  </g>
+
+  <!-- Summary Box -->
+  <g transform="translate(45, 535)" filter="url(#shadow)">
+    <rect width="1010" height="135" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+    <text x="25" y="28" class="node-title" fill="#152c4a">Cumplimiento de Estándares, Compatibilidad con Excel y Cero Emojis (RF-06 / RF-07):</text>
+    <text x="25" y="50" class="node-desc">• Todos los reportes CSV incorporan la cabecera UTF-8 BOM (\uFEFF) asegurando apertura nativa inmediata en Microsoft Excel sin caracteres extraños ni acentos rotos.</text>
+    <text x="25" y="70" class="node-desc">• Permite a la dirección de Papelería A B C conciliar sus obligaciones fiscales (IVA 16%), calcular comisiones y reabastecer oportunamente los artículos de alta rotación.</text>
+    <text x="25" y="90" class="node-desc">• Procesamiento 100% en cliente sin recargas de página, garantizando velocidad y autonomía sin depender de conexión a servidores en nube.</text>
+    <text x="25" y="110" class="node-desc">• Estilo visual sobrio, técnico e industrial bajo riguroso cumplimiento de la política corporativa de Cero Emojis.</text>
+  </g>
+</svg>

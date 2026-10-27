@@ -1,0 +1,174 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 740" width="1100" height="740">
+  <defs>
+    <style>
+      .title { font-family: 'Segoe UI', Arial, sans-serif; font-size: 21px; font-weight: 800; fill: #152c4a; }
+      .subtitle { font-family: 'Segoe UI', Arial, sans-serif; font-size: 12.5px; font-weight: 600; fill: #64748b; }
+      .node-box { rx: 8px; stroke-width: 1.8px; }
+      .node-title { font-family: 'Segoe UI', Arial, sans-serif; font-size: 12.5px; font-weight: 700; }
+      .node-desc { font-family: 'Segoe UI', Arial, sans-serif; font-size: 11px; fill: #334155; }
+      .badge { font-family: 'Segoe UI', Arial, sans-serif; font-size: 10px; font-weight: 800; }
+    </style>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0f172a" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1100" height="740" fill="#f8fafc"/>
+  <rect x="20" y="15" width="1060" height="705" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+
+  <!-- Header -->
+  <text x="45" y="52" class="title">ARQUITECTURA DE SEGURIDAD, AUTENTICACIÓN Y CONTROL RBAC</text>
+  <text x="45" y="73" class="subtitle">Papelería A B C — Fase 6: Sprint 3 (Login Obligatorio, Cifrado SHA-256 + Salt y Segregación de los 3 Perfiles | RF-09)</text>
+  <line x1="45" y1="86" x2="1055" y2="86" stroke="#e2e8f0" stroke-width="1.5"/>
+
+  <!-- STEP 1: Login Obligatorio -->
+  <g transform="translate(45, 105)" filter="url(#shadow)">
+    <rect width="220" height="235" class="node-box" fill="#f0f9ff" stroke="#0284c7"/>
+    <rect width="220" height="30" rx="8" fill="#0284c7"/>
+    <text x="12" y="20" font-family="'Segoe UI', Arial" font-size="11.5" font-weight="800" fill="#ffffff">1. LOGIN OBLIGATORIO AL ABRIR</text>
+    <text x="14" y="54" class="node-title" fill="#0369a1">Bloqueo Inicial Mandatorio</text>
+    <text x="14" y="73" class="node-desc">• Apertura de index.html bloqueada</text>
+    <text x="14" y="90" class="node-desc">• Sin auto-bypass sin credenciales</text>
+    <text x="14" y="107" class="node-desc">• Modal static (no cierra con Esc)</text>
+    <text x="14" y="130" class="node-title" fill="#0369a1">3 Perfiles Oficiales (1 Clic)</text>
+    <text x="14" y="149" class="node-desc">• Admin: admin / admin123</text>
+    <text x="14" y="166" class="node-desc">• Supervisor: supervisor / super123</text>
+    <text x="14" y="183" class="node-desc">• Usuario: usuario / usuario123</text>
+    <text x="14" y="204" class="node-desc">• Formulario manual con validación</text>
+  </g>
+
+  <!-- Arrow 1 -> 2 -->
+  <path d="M 270 222 L 310 222" stroke="#152c4a" stroke-width="2.5" fill="none"/>
+  <polygon points="310,217 320,222 310,227" fill="#152c4a"/>
+
+  <!-- STEP 2: Motor Criptografico SHA-256 -->
+  <g transform="translate(325, 105)" filter="url(#shadow)">
+    <rect width="225" height="235" class="node-box" fill="#fdf4ff" stroke="#7c3aed"/>
+    <rect width="225" height="30" rx="8" fill="#7c3aed"/>
+    <text x="12" y="20" font-family="'Segoe UI', Arial" font-size="11.5" font-weight="800" fill="#ffffff">2. MOTOR CRIPTOGRÁFICO</text>
+    <text x="14" y="54" class="node-title" fill="#6b21a8">Dispersión SHA-256 + Salt</text>
+    <text x="14" y="73" class="node-desc">• Sal criptográfica única (16 bytes)</text>
+    <text x="14" y="90" class="node-desc">• Hash = SHA256(Salt + Password)</text>
+    <text x="14" y="107" class="node-desc">• Web Crypto API nativa en navegador</text>
+    <text x="14" y="124" class="node-desc">• Fallback matemático puro (RFC 6234)</text>
+    <text x="14" y="148" class="node-title" fill="#6b21a8">Seguridad en Reposo</text>
+    <text x="14" y="167" class="node-desc">• Contraseñas nunca en texto claro</text>
+    <text x="14" y="184" class="node-desc">• Blindaje anti ataques de diccionario</text>
+    <text x="14" y="204" class="node-desc">• Inmutabilidad en cálculo local</text>
+  </g>
+
+  <!-- Arrow 2 -> 3 -->
+  <path d="M 555 222 L 595 222" stroke="#152c4a" stroke-width="2.5" fill="none"/>
+  <polygon points="595,217 605,222 595,227" fill="#152c4a"/>
+
+  <!-- STEP 3: Validacion Relacional -->
+  <g transform="translate(610, 105)" filter="url(#shadow)">
+    <rect width="225" height="235" class="node-box" fill="#ecfdf5" stroke="#3a8e63"/>
+    <rect width="225" height="30" rx="8" fill="#3a8e63"/>
+    <text x="12" y="20" font-family="'Segoe UI', Arial" font-size="11.5" font-weight="800" fill="#ffffff">3. VALIDACIÓN RELACIONAL</text>
+    <text x="14" y="54" class="node-title" fill="#047857">Tabla 'usuarios' (3FN)</text>
+    <text x="14" y="73" class="node-desc">• Búsqueda por username normalizado</text>
+    <text x="14" y="90" class="node-desc">• Comparación HashCalc == HashBD</text>
+    <text x="14" y="107" class="node-desc">• Verificación activo == 1 en BD</text>
+    <text x="14" y="130" class="node-title" fill="#047857">Gestión de Sesión</text>
+    <text x="14" y="149" class="node-desc">• Asiento de ultimo_acceso ISO</text>
+    <text x="14" y="166" class="node-desc">• Persistencia en sessionStorage</text>
+    <text x="14" y="183" class="node-desc">• Botón 'Cerrar Sesión' en cabecera</text>
+    <text x="14" y="204" class="node-desc">• Re-bloqueo total al hacer logout</text>
+  </g>
+
+  <!-- Arrow 3 -> 4 -->
+  <path d="M 840 222 L 870 222" stroke="#152c4a" stroke-width="2.5" fill="none"/>
+  <polygon points="870,217 880,222 870,227" fill="#152c4a"/>
+
+  <!-- STEP 4: Pasarela RBAC -->
+  <g transform="translate(885, 105)" filter="url(#shadow)">
+    <rect width="170" height="235" class="node-box" fill="#152c4a" stroke="#0f172a"/>
+    <rect width="170" height="30" rx="8" fill="#0f172a"/>
+    <text x="12" y="20" font-family="'Segoe UI', Arial" font-size="11.5" font-weight="800" fill="#ffffff">4. PASARELA RBAC</text>
+    <text x="12" y="50" font-family="'Segoe UI', Arial" font-size="11" font-weight="700" fill="#93c5fd">Delimitación Dinámica</text>
+    <text x="12" y="72" font-family="'Segoe UI', Arial" font-size="10" fill="#e2e8f0">• Evaluación de rol</text>
+    <text x="12" y="89" font-family="'Segoe UI', Arial" font-size="10" fill="#e2e8f0">• Ocultamiento de tabs</text>
+    <text x="12" y="106" font-family="'Segoe UI', Arial" font-size="10" fill="#e2e8f0">• Bloqueo de botones</text>
+    <text x="12" y="123" font-family="'Segoe UI', Arial" font-size="10" fill="#e2e8f0">• Costos protegidos</text>
+    <text x="12" y="140" font-family="'Segoe UI', Arial" font-size="10" fill="#e2e8f0">• Modo Solo Consulta</text>
+    <text x="12" y="157" font-family="'Segoe UI', Arial" font-size="10" fill="#e2e8f0">• Corte Z para Super</text>
+    <text x="12" y="177" font-family="'Segoe UI', Arial" font-size="10.5" font-weight="700" fill="#38bdf8">Segregación Estricta</text>
+    <text x="12" y="196" font-family="'Segoe UI', Arial" font-size="10" fill="#e2e8f0">• Protección de datos</text>
+    <text x="12" y="213" font-family="'Segoe UI', Arial" font-size="10" fill="#e2e8f0">• Auditoría contable</text>
+  </g>
+
+  <!-- Connectors to the 3 profiles below -->
+  <path d="M 970 345 L 970 370 L 205 370 L 205 390" stroke="#0284c7" stroke-width="2" fill="none"/>
+  <polygon points="200,390 205,400 210,390" fill="#0284c7"/>
+
+  <path d="M 970 345 L 970 370 L 550 370 L 550 390" stroke="#7c3aed" stroke-width="2" fill="none"/>
+  <polygon points="545,390 550,400 555,390" fill="#7c3aed"/>
+
+  <path d="M 970 345 L 970 370 L 895 370 L 895 390" stroke="#3a8e63" stroke-width="2" fill="none"/>
+  <polygon points="890,390 895,400 900,390" fill="#3a8e63"/>
+
+  <!-- PROFILE 1: ADMINISTRADOR -->
+  <g transform="translate(45, 400)" filter="url(#shadow)">
+    <rect width="320" height="295" class="node-box" fill="#ffffff" stroke="#152c4a" stroke-width="2"/>
+    <rect width="320" height="32" rx="8" fill="#152c4a"/>
+    <text x="12" y="21" font-family="'Segoe UI', Arial" font-size="11.5" font-weight="800" fill="#ffffff">[ADMINISTRADOR] Gerardo Cabrera Morales</text>
+    
+    <rect x="12" y="40" width="296" height="22" rx="4" fill="#eff6ff"/>
+    <text x="18" y="55" font-family="'Segoe UI', Arial" font-size="10.5" font-weight="700" fill="#1e40af">DESTINADO A: PERFILES Y CONTRASEÑAS</text>
+    
+    <text x="14" y="80" class="node-title" fill="#152c4a">Funciones Exclusivas de Gestión:</text>
+    <text x="14" y="99" class="node-desc">• Abre de forma automática en 'Perfiles y Contraseñas'</text>
+    <text x="14" y="117" class="node-desc">• Alta, edición y suspensión de usuarios del sistema</text>
+    <text x="14" y="135" class="node-desc">• Reseteo criptográfico de contraseñas (SHA-256 + salt)</text>
+    <text x="14" y="153" class="node-desc">• Asignación de roles y privilegios (RBAC)</text>
+    <text x="14" y="171" class="node-desc">• Auditoría de ingresos y marcas de último acceso</text>
+    <text x="14" y="189" class="node-desc">• Acceso institucional y de supervisión general</text>
+    <text x="14" y="214" font-family="'Segoe UI', Arial" font-size="11" font-weight="700" fill="#0369a1">Credenciales por Defecto:</text>
+    <text x="14" y="233" class="node-desc">Usuario: admin | Contraseña: admin123</text>
+    <text x="14" y="254" font-family="'Segoe UI', Arial" font-size="10" font-weight="600" fill="#0369a1">Alineación contractual con Calendario.pdf</text>
+  </g>
+
+  <!-- PROFILE 2: SUPERVISOR -->
+  <g transform="translate(390, 400)" filter="url(#shadow)">
+    <rect width="320" height="295" class="node-box" fill="#ffffff" stroke="#7c3aed" stroke-width="2"/>
+    <rect width="320" height="32" rx="8" fill="#7c3aed"/>
+    <text x="12" y="21" font-family="'Segoe UI', Arial" font-size="11.5" font-weight="800" fill="#ffffff">[SUPERVISOR] Astrid García Ramírez</text>
+    
+    <rect x="12" y="40" width="296" height="22" rx="4" fill="#faf5ff"/>
+    <text x="18" y="55" font-family="'Segoe UI', Arial" font-size="10.5" font-weight="700" fill="#6b21a8">DESTINADO A: ALTAS CATÁLOGO Y CORTES CAJA</text>
+    
+    <text x="14" y="80" class="node-title" fill="#6b21a8">Funciones Comerciales y de Control:</text>
+    <text x="14" y="99" class="node-desc">• Dar de alta productos nuevos en catálogo [F2]</text>
+    <text x="14" y="117" class="node-desc">• Dar de alta y editar marcas y categorías</text>
+    <text x="14" y="135" class="node-desc">• Realizar Cortes de Caja Z ("solo el supervisor")</text>
+    <text x="14" y="153" class="node-desc">• Consulta de Reportes Analíticos Financieros y KPIs</text>
+    <text x="14" y="171" class="node-desc">• Operación completa en terminal de venta POS</text>
+    <text x="14" y="195" font-family="'Segoe UI', Arial" font-size="10.5" font-weight="700" fill="#dc2626">Restricción Reglamentaria Estricta:</text>
+    <text x="14" y="214" class="node-desc" fill="#b91c1c">• Sin acceso a administración de usuarios ni claves</text>
+    <text x="14" y="233" class="node-desc">Usuario: supervisor | Contraseña: super123</text>
+    <text x="14" y="254" font-family="'Segoe UI', Arial" font-size="10" font-weight="600" fill="#6b21a8">Facultad de arqueo físico y cierre de turnos</text>
+  </g>
+
+  <!-- PROFILE 3: USUARIO / CAJERO -->
+  <g transform="translate(735, 400)" filter="url(#shadow)">
+    <rect width="320" height="295" class="node-box" fill="#ffffff" stroke="#3a8e63" stroke-width="2"/>
+    <rect width="320" height="32" rx="8" fill="#3a8e63"/>
+    <text x="12" y="21" font-family="'Segoe UI', Arial" font-size="11.5" font-weight="800" fill="#ffffff">[USUARIO / CAJERO] Daniel Parada Gonzalez</text>
+    
+    <rect x="12" y="40" width="296" height="22" rx="4" fill="#f0fdf4"/>
+    <text x="18" y="55" font-family="'Segoe UI', Arial" font-size="10.5" font-weight="700" fill="#15803d">DESTINADO A: VENTAS MOSTRADOR POS</text>
+    
+    <text x="14" y="80" class="node-title" fill="#15803d">Operación Rápida de Mostrador:</text>
+    <text x="14" y="99" class="node-desc">• Terminal POS: escaneo y cobro de tickets rápido</text>
+    <text x="14" y="117" class="node-desc">• Catálogo de inventario en modo 'Solo Consulta'</text>
+    <text x="14" y="135" class="node-desc">• Apertura de caja y exportación de ventas del día</text>
+    <text x="14" y="159" font-family="'Segoe UI', Arial" font-size="10.5" font-weight="700" fill="#dc2626">Restricciones Estrictas de Seguridad:</text>
+    <text x="14" y="177" class="node-desc" fill="#b91c1c">• PROHIBIDO: Dar de alta productos, categorías o marcas</text>
+    <text x="14" y="195" class="node-desc" fill="#b91c1c">• PROHIBIDO: Hacer cortes de caja (solo el supervisor)</text>
+    <text x="14" y="213" class="node-desc" fill="#b91c1c">• PROHIBIDO: Ver pestaña Reportes y Configuración</text>
+    <text x="14" y="233" class="node-desc">Usuario: usuario | Contraseña: usuario123</text>
+    <text x="14" y="254" font-family="'Segoe UI', Arial" font-size="10" font-weight="600" fill="#15803d">Protección de costos y márgenes confidenciales</text>
+  </g>
+</svg>
